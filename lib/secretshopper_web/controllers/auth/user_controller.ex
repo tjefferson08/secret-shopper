@@ -21,11 +21,9 @@ defmodule SecretshopperWeb.UserController do
     |> User.registration_changeset(user_params)
     case Repo.insert(changeset) do
       {:ok, user} ->
-        conn
-        |> put_flash(:info, "#{user.name} was created!")
-        |> redirect(to: user_path(conn, :show, user))
+        render(conn, "show.json", user: user)
       {:error, changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        json(conn, %{errors: Ecto.Changeset.traverse_errors(changeset, &SecretshopperWeb.ErrorHelpers.translate_error/1)})
     end
   end
 end
