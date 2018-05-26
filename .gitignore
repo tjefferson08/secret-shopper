@@ -26,4 +26,5 @@ npm-debug.log
 # variables.
 /config/*.secret.exs
 
-/node_modules
+/priv/clientjs/node_modules
+/priv/clientjs/build
