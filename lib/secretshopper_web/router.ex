@@ -14,14 +14,8 @@ defmodule SecretshopperWeb.Router do
   end
 
   scope "/", SecretshopperWeb do
-    pipe_through :browser # Use the default browser stack
-
-    get "/", PageController, :index
-    get "/hello", HelloController, :index
-    get "/hello/:messenger", HelloController, :show
-
     scope "/auth"  do
-      pipe_through :browser
+      pipe_through :api
       resources "/users", UserController, only: [:show, :new, :create]
     end
   end
