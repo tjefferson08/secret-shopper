@@ -14,20 +14,6 @@ defmodule Secretshopper.User do
   @required_fields ~w(email)a
   @optional_fields ~w(name)a
 
-
-  def subject_for_token(user, _claims) do
-    {:ok, to_string(user.id)}
-  end
-
-  # def resource_from_claims(claims) do
-  #   user = claims["sub"]
-  #   |> Repo.get!(User, id)
-  #   {:ok, user}
-
-  #   # handle :err
-  # end
-
-
   @doc false
   def changeset(struct, params \\ %{}) do
     struct
