@@ -25,14 +25,3 @@ config :logger, :console,
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
-
-config :ueberauth, Ueberauth,
-  providers: [
-    identity: { Ueberauth.Strategy.Identity, [
-                  request_path: "/auth/identity",
-                  callback_path: "/auth/identity/callback",
-                  callback_methods: ["POST"],
-                  uid_field: :username,
-                  nickname_field: :username,
-                ] }
-  ]

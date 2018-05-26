@@ -1,6 +1,5 @@
 defmodule SecretshopperWeb.Router do
   use SecretshopperWeb, :router
-  require Ueberauth
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -23,11 +22,7 @@ defmodule SecretshopperWeb.Router do
 
     scope "/auth"  do
       pipe_through :browser
-
-      get "/:provider", AuthController, :request
-      get "/:provider/callback", AuthController, :callback
-      post "/:provider/callback", AuthController, :callback
-      delete "/logout", AuthController, :delete
+      resources "/users", UserController, only: [:show, :new, :create]
     end
   end
 

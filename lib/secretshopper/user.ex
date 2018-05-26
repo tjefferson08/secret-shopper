@@ -11,6 +11,10 @@ defmodule Secretshopper.User do
     timestamps()
   end
 
+  @required_fields ~w(email)a
+  @optional_fields ~w(name)a
+
+
   def subject_for_token(user, _claims) do
     {:ok, to_string(user.id)}
   end
@@ -23,11 +27,12 @@ defmodule Secretshopper.User do
   #   # handle :err
   # end
 
+
   @doc false
-  def changeset(user, attrs) do
-    user
-    |> cast(attrs, [:name, :email])
-    |> validate_required([:name, :email])
+  def changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, @required_fields ++ @optional_fields)
+    |> validate_required(@required_fields)
     |> validate_format(:email, ~r/@/)
   end
 end
