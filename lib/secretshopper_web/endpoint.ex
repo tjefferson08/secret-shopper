@@ -10,7 +10,9 @@ defmodule SecretshopperWeb.Endpoint do
   plug Plug.Static,
     at: "/",
     from: "priv/clientjs/build/",
-    only: ~w(index.html favicon.ico static)
+    only: ~w(index.html favicon.ico static service-worker.js)
+
+  plug CORSPlug
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
