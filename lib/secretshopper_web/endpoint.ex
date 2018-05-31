@@ -12,7 +12,8 @@ defmodule SecretshopperWeb.Endpoint do
     from: "priv/clientjs/build/",
     only: ~w(index.html favicon.ico static service-worker.js)
 
-  plug CORSPlug
+  plug CORSPlug, origin: ["http://localhost:3000", "http://localhost:4000"]
+
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

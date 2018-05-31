@@ -14,6 +14,11 @@ defmodule SecretshopperWeb.Router do
   end
 
   scope "/", SecretshopperWeb do
+    scope "/api" do
+      pipe_through :api
+      resources "/sessions", SessionController, only: [:create]
+    end
+
     scope "/auth"  do
       pipe_through :api
       resources "/users", UserController, only: [:show, :new, :create]
