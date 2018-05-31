@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './App.css';
 import SignUpForm from './SignUpForm';
+import SignInForm from './SignInForm';
 
 const Home = () =>
   <div>
@@ -19,6 +20,9 @@ const BasicExample = () =>
           <Link to="/sign_up">Sign Up</Link>
         </li>
         <li>
+          <Link to="/sign_in">Sign In</Link>
+        </li>
+        <li>
           <Link to="/topics">Topics</Link>
         </li>
       </ul>
@@ -27,6 +31,7 @@ const BasicExample = () =>
 
       <Route exact path="/" component={Home} />
       <Route path="/sign_up" component={SignUpForm} />
+      <Route path="/sign_in" component={SignInForm} />
     </div>
   </Router>;
 
