@@ -7,7 +7,8 @@ defmodule SecretshopperWeb.UserControllerTest do
     test "Creates user and responds with the payload when attrs are valid" do
       params =
         string_params_for(:user)
-        |> Map.merge(%{"password": "secrets"})
+        |> Map.merge(%{"password": "secrets",
+                      "password_confirmation": "secrets"})
 
       conn =
         build_conn()
@@ -27,8 +28,23 @@ defmodule SecretshopperWeb.UserControllerTest do
         build_conn()
         |> post("/auth/users", user: params)
 
-      assert json_response(conn, 200) == %{
+      assert %{
         "errors" => %{"password" => ["can't be blank"]}
+      } = json_response(conn, 400)
+    end
+
+    test "Does not create user when pw & confirmation do not match" do
+      params =
+        string_params_for(:user)
+        |> Map.merge(%{"password": "secrets",
+                      "password_confirmation": "not-the-same"})
+
+      conn =
+        build_conn()
+        |> post("/auth/users", user: params)
+
+      assert json_response(conn, 400) == %{
+        "errors" => %{"password_confirmation" => ["does not match password!"]}
       }
     end
   end

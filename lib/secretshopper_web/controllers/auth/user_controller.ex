@@ -23,7 +23,9 @@ defmodule SecretshopperWeb.UserController do
       {:ok, user} ->
         render(conn, "show.json", user: user)
       {:error, changeset} ->
-        json(conn, %{errors: Ecto.Changeset.traverse_errors(changeset, &SecretshopperWeb.ErrorHelpers.translate_error/1)})
+        conn
+        |> put_status(400)
+        |> json(%{errors: Ecto.Changeset.traverse_errors(changeset, &SecretshopperWeb.ErrorHelpers.translate_error/1)})
     end
   end
 end

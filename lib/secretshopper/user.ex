@@ -1,6 +1,5 @@
 defmodule Secretshopper.User do
   use Ecto.Schema
-  use Guardian, otp_app: :secretshopper
 
   import Ecto.Changeset
 
@@ -26,8 +25,8 @@ defmodule Secretshopper.User do
   def registration_changeset(struct, params) do
     struct
     |> changeset(params)
-    |> cast(params, ~w(password)a, [])
     |> validate_length(:password, min: 6, max: 100)
+    |> validate_confirmation(:password, message: "does not match password!", required: true)
     |> hash_password
   end
 
