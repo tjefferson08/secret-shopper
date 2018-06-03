@@ -11,7 +11,7 @@ defmodule Secretshopper.Application do
       # Start the Ecto repository
       supervisor(Secretshopper.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(SecretshopperWeb.Endpoint, []),
+      supervisor(SecretshopperWeb.Endpoint, [])
       # Start your own worker by calling: Secretshopper.Worker.start_link(arg1, arg2, arg3)
       # worker(Secretshopper.Worker, [arg1, arg2, arg3]),
     ]

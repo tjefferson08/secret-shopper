@@ -4,10 +4,10 @@ defmodule Secretshopper.User do
   import Ecto.Changeset
 
   schema "users" do
-    field :email, :string
-    field :name, :string
-    field :password, :string, virtual: true
-    field :password_hash, :string
+    field(:email, :string)
+    field(:name, :string)
+    field(:password, :string, virtual: true)
+    field(:password_hash, :string)
     timestamps()
   end
 
@@ -36,8 +36,11 @@ defmodule Secretshopper.User do
       %Ecto.Changeset{
         valid?: true,
         changes: %{password: password}
-      } -> put_change(changeset, :password_hash, Comeonin.Bcrypt.hashpwsalt(password))
-      _ -> changeset
+      } ->
+        put_change(changeset, :password_hash, Comeonin.Bcrypt.hashpwsalt(password))
+
+      _ ->
+        changeset
     end
   end
 end

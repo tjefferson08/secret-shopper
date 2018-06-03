@@ -2,10 +2,9 @@ defmodule Secretshopper.Recipe do
   use Ecto.Schema
   import Ecto.Changeset
 
-
   schema "recipe" do
-    field :cook_time_in_minutes, :integer
-    field :name, :string
+    field(:cook_time_in_minutes, :integer)
+    field(:name, :string)
 
     timestamps()
   end

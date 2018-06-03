@@ -14,8 +14,7 @@ config :secretshopper, SecretshopperWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "skwFCjJJKcZMKh5+jpuqyjCJHeUyFHP5D6LopwWA0tSKkyA5ER6BlAcviB04KFCV",
   render_errors: [view: SecretshopperWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Secretshopper.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Secretshopper.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -23,9 +22,9 @@ config :logger, :console,
   metadata: [:user_id]
 
 config :secretshopper, Secretshopper.Guardian,
- issuer: "Secretshopper.#{Mix.env}",
- secret_key: to_string(Mix.env) <> "SuPerseCret_aBraCadabrA"
+  issuer: "Secretshopper.#{Mix.env()}",
+  secret_key: to_string(Mix.env()) <> "SuPerseCret_aBraCadabrA"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"
