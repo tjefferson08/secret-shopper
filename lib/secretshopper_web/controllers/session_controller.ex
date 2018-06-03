@@ -1,29 +1,23 @@
 defmodule SecretshopperWeb.SessionController do
-  import SecretshopperWeb.Auth, only: [sign_in_with_email_and_password: 3, sign_out: 1]
-  plug(:scrub_params, "session" when action in ~w(create)a)
+  import SecretshopperWeb.Auth, only: [request_auth_token: 2]
+
   use SecretshopperWeb, :controller
 
   def create(conn, %{"session" => %{"email" => email, "password" => password}}) do
-    case sign_in_with_email_and_password(conn, email, password) do
-      {:ok, conn} ->
+    case request_auth_token(email, password) do
+      {:ok, token, _claims} ->
         conn
-        |> json(%{"message" => "ok"})
+        |> json(%{"token" => token})
 
-      {:error, :not_found, conn} ->
+      {:error, :not_found} ->
         conn
         |> put_status(400)
         |> json(%{"message" => "failure"})
 
-      {:error, :unauthorized, conn} ->
+      {:error, :unauthorized} ->
         conn
         |> put_status(403)
         |> json(%{"message" => "forbidden"})
     end
-  end
-
-  def delete(conn, _) do
-    conn
-    |> sign_out()
-    |> json(%{"message" => "ok"})
   end
 end
