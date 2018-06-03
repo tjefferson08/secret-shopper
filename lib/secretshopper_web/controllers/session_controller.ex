@@ -1,27 +1,29 @@
 defmodule SecretshopperWeb.SessionController do
+  import SecretshopperWeb.Auth, only: [sign_in_with_email_and_password: 3, sign_out: 1]
+  plug(:scrub_params, "session" when action in ~w(create)a)
   use SecretshopperWeb, :controller
-  import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
-  alias Secretshopper.Repo
-  alias Secretshopper.User
 
-  def create(conn, %{"session" => %{"email" => email,
-                                    "password" => password}}) do
-    case Repo.get_by(User, email: email) do
-      nil ->
+  def create(conn, %{"session" => %{"email" => email, "password" => password}}) do
+    case sign_in_with_email_and_password(conn, email, password) do
+      {:ok, conn} ->
+        conn
+        |> json(%{"message" => "ok"})
+
+      {:error, :not_found, conn} ->
         conn
         |> put_status(400)
         |> json(%{"message" => "failure"})
-      user ->
-        if checkpw(password, user.password_hash) do
-          conn
-          |> Secretshopper.Guardian.Plug.sign_in(user)
-          |> json(%{"message" => "ok"})
-        else
-          dummy_checkpw()
-          conn
-          |> put_status(403)
-          |> json(%{"message" => "forbidden"})
-        end
+
+      {:error, :unauthorized, conn} ->
+        conn
+        |> put_status(403)
+        |> json(%{"message" => "forbidden"})
     end
+  end
+
+  def delete(conn, _) do
+    conn
+    |> sign_out()
+    |> json(%{"message" => "ok"})
   end
 end
