@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 class SignUpForm extends Component {
   constructor(props) {
     super(props);
+    const { onSubmit } = props;
     this.state = {
       name: '',
       email: '',
@@ -12,6 +13,7 @@ class SignUpForm extends Component {
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onSubmit = onSubmit.bind(this);
   }
 
   handleInputChange(event) {
@@ -22,20 +24,8 @@ class SignUpForm extends Component {
   }
 
   handleSubmit(event) {
-    console.log('state to be submitted', this.state);
     event.preventDefault();
-    axios
-      .post(`${process.env.REACT_APP_API_URL}/auth/users`, {
-        user: {
-          ...this.state
-        }
-      })
-      .then(function(response) {
-        console.log(response);
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+    this.onSubmit(this.state);
   }
 
   render() {
