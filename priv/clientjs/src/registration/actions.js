@@ -9,12 +9,10 @@ const registerUserRequest = () => {
 };
 
 const registerUserSuccess = user => {
-  console.log('succes', user);
   return { type: REGISTER_USER_SUCCESS, user };
 };
 
 const registerUserFailure = err => {
-  console.log('failure', err);
   return { type: REGISTER_USER_FAILURE };
 };
 
@@ -31,8 +29,8 @@ export const registerUser = ({ name, email, password, passwordConfirm }) => {
         }
       })
       .then(
-        user => {
-          dispatch(registerUserSuccess(user));
+        response => {
+          dispatch(registerUserSuccess(response.data.user));
         },
         err => {
           dispatch(registerUserFailure(err));

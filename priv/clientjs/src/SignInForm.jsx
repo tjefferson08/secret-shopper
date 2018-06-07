@@ -4,12 +4,14 @@ import React, { Component } from 'react';
 class SignInForm extends Component {
   constructor(props) {
     super(props);
+    const { onSubmit } = props;
     this.state = {
       email: '',
       password: ''
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onSubmit = onSubmit.bind(this);
   }
 
   handleInputChange(event) {
@@ -21,18 +23,7 @@ class SignInForm extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    axios
-      .post(`${process.env.REACT_APP_API_URL}/api/sessions`, {
-        session: {
-          ...this.state
-        }
-      })
-      .then(function(response) {
-        console.log(response);
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+    this.onSubmit(this.state);
   }
 
   render() {

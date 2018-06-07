@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './App.css';
 import SignUp from './SignUp';
-import SignInForm from './SignInForm';
+import SignIn from './SignIn';
 
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
-import reducers from './reducers';
+import registration from './registration/reducers';
 
 const recipeApp = combineReducers({
-  registration: reducers.registration
+  registration
 });
 
 const store = createStore(recipeApp, applyMiddleware(thunk));
@@ -40,8 +40,14 @@ const BasicExample = () =>
       <hr />
 
       <Route exact path="/" component={Home} />
-      <Route path="/sign_up" render={props => <SignUp store={store} {...props} />} />
-      <Route path="/sign_in" component={SignInForm} />
+      <Route
+        path="/sign_up"
+        render={props => <SignUp store={store} {...props} />}
+      />
+      <Route
+        path="/sign_in"
+        render={props => <SignIn store={store} {...props} />}
+      />
     </div>
   </Router>;
 
