@@ -8,15 +8,16 @@ import cookie from 'js-cookie';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe('succesful login', () => {
+const token = ['abc', JSON.stringify({ email: 'bob@bob.com' }), 'def']
+  .map(btoa)
+  .join('.');
+
+describe('successful login', () => {
   beforeEach(() => {
     nock(process.env.REACT_APP_API_URL).post('/api/sessions').reply(
       200,
       {
-        token: 'abc123',
-        user: {
-          email: 'bob@bob.com'
-        }
+        token: token
       },
       { 'Access-Control-Allow-Origin': '*' }
     );
@@ -27,7 +28,10 @@ describe('succesful login', () => {
   });
 
   test('creates LOGIN_REQUEST and LOGIN_SUCCESS', () => {
-    const expectedActions = [{ type: LOGIN_REQUEST }, { type: LOGIN_SUCCESS }];
+    const expectedActions = [
+      { type: LOGIN_REQUEST },
+      { type: LOGIN_SUCCESS, user: { email: 'bob@bob.com' } }
+    ];
     const store = mockStore({});
     return store
       .dispatch(login({ email: 'bob@bob.com', password: 'secret' }))
@@ -42,7 +46,9 @@ describe('succesful login', () => {
     return store
       .dispatch(login({ email: 'bob@bob.com', password: 'secret' }))
       .then(() => {
-        expect(cookie.set).toBeCalledWith('token', 'abc123', { expires: 1 });
+        expect(cookie.set).toBeCalledWith('token', token, {
+          expires: 1
+        });
         expect(true).toBe(true);
       });
   });

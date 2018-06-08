@@ -10,11 +10,19 @@ const loginRequest = () => {
 };
 
 const loginSuccess = user => {
-  return { type: LOGIN_SUCCESS };
+  return { type: LOGIN_SUCCESS, user };
 };
 
 const loginFailure = err => {
   return { type: LOGIN_FAILURE };
+};
+
+const claimsFromToken = token => {
+  const encodedClaims = token.split('.')[1];
+  if (!encodedClaims) {
+    throw new Error('Invalid token');
+  }
+  return JSON.parse(atob(encodedClaims));
 };
 
 export const login = ({ email, password }) => {
@@ -29,8 +37,9 @@ export const login = ({ email, password }) => {
       })
       .then(
         response => {
-          cookie.set('token', response.data.token, { expires: 1 });
-          dispatch(loginSuccess());
+          const token = response.data.token;
+          cookie.set('token', token, { expires: 1 });
+          dispatch(loginSuccess(claimsFromToken(token)));
         },
         err => {
           dispatch(loginFailure(err));
