@@ -20,12 +20,12 @@ export const registerUser = ({ name, email, password, passwordConfirm }) => {
   return dispatch => {
     dispatch(registerUserRequest());
     return axios
-      .post(`${process.env.REACT_APP_API_URL}/auth/users`, {
+      .post(`${process.env.REACT_APP_API_URL}/api/users`, {
         user: {
           name,
           email,
           password,
-          passwordConfirm
+          password_confirmation: passwordConfirm
         }
       })
       .then(

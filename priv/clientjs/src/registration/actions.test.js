@@ -14,7 +14,7 @@ const mockStore = configureMockStore(middlewares);
 
 describe('successful login', () => {
   beforeEach(() => {
-    nock(process.env.REACT_APP_API_URL).post('/auth/users').reply(
+    nock(process.env.REACT_APP_API_URL).post('/api/users').reply(
       200,
       {
         user: {
@@ -48,7 +48,7 @@ describe('successful login', () => {
           name: 'bob',
           email: 'bob@bob.com',
           password: 'secret',
-          passwordConfirm: 'secret'
+          password_confirmation: 'secret'
         })
       )
       .then(() => {
@@ -60,7 +60,7 @@ describe('successful login', () => {
 describe('registration failure', () => {
   test('creates REGISTER_USER_REQUEST, then REGISTER_USER_FAILURE', () => {
     nock(process.env.REACT_APP_API_URL)
-      .post('/auth/users')
+      .post('/api/users')
       .reply(500, {}, { 'Access-Control-Allow-Origin': '*' });
 
     const expectedActions = [
@@ -76,7 +76,7 @@ describe('registration failure', () => {
           name: 'bob',
           email: 'bob@bob.com',
           password: 'secret',
-          passwordConfirm: 'secret'
+          password_confirmation: 'secret'
         })
       )
       .then(() => {
