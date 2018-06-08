@@ -13,3 +13,5 @@ jobs:
       - run: mix deps.get
       - run: mix ecto.create
       - run: mix test
+      - run: yarn install
+      - run: yarn test
