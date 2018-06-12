@@ -1,9 +1,9 @@
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE, login } from './actions';
-
-import configureMockStore from 'redux-mock-store';
-import nock from 'nock';
-import thunk from 'redux-thunk';
+import { push } from 'connected-react-router';
 import cookie from 'js-cookie';
+import nock from 'nock';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE, login } from './actions';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -30,7 +30,8 @@ describe('successful login', () => {
   test('creates LOGIN_REQUEST and LOGIN_SUCCESS', () => {
     const expectedActions = [
       { type: LOGIN_REQUEST },
-      { type: LOGIN_SUCCESS, user: { email: 'bob@bob.com' } }
+      { type: LOGIN_SUCCESS, user: { email: 'bob@bob.com' } },
+      push('/')
     ];
     const store = mockStore({});
     return store

@@ -1,60 +1,46 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import {
+  ConnectedRouter,
+  connectRouter,
+  routerMiddleware
+} from 'connected-react-router';
+import { createBrowserHistory } from 'history';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { Route, Switch } from 'react-router';
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
+import thunk from 'redux-thunk';
 import './App.css';
+import Dashboard from './Dashboard';
+import NavBar from './NavBar';
 import SignUp from './SignUp';
 import SignIn from './SignIn';
-
-import { applyMiddleware, combineReducers, createStore } from 'redux';
-import thunk from 'redux-thunk';
 import registration from './registration/reducers';
 
-const recipeApp = combineReducers({
+const history = createBrowserHistory();
+
+const rootReducer = combineReducers({
   registration
 });
 
-const store = createStore(recipeApp, applyMiddleware(thunk));
+const store = createStore(
+  connectRouter(history)(rootReducer),
+  {}, // initial state
+  compose(applyMiddleware(routerMiddleware(history), thunk))
+);
 
-const Home = () =>
-  <div>
-    <h2>Home</h2>
-  </div>;
-
-const BasicExample = () =>
-  <Router>
-    <div>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/sign_up">Sign Up</Link>
-        </li>
-        <li>
-          <Link to="/sign_in">Sign In</Link>
-        </li>
-        <li>
-          <Link to="/topics">Topics</Link>
-        </li>
-      </ul>
-
-      <hr />
-
-      <Route exact path="/" component={Home} />
-      <Route
-        path="/sign_up"
-        render={props => <SignUp store={store} {...props} />}
-      />
-      <Route
-        path="/sign_in"
-        render={props => <SignIn store={store} {...props} />}
-      />
-    </div>
-  </Router>;
-
-class App extends Component {
-  render() {
-    return <BasicExample />;
-  }
-}
+const App = () =>
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <div>
+        <NavBar />
+        <hr />
+        <Switch>
+          <Route exact path="/" component={Dashboard} />
+          <Route path="/sign_up" render={props => <SignUp {...props} />} />
+          <Route path="/sign_in" render={props => <SignIn {...props} />} />
+        </Switch>
+      </div>
+    </ConnectedRouter>
+  </Provider>;
 
 export default App;

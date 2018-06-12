@@ -1,6 +1,6 @@
 import axios from 'axios';
 import cookie from 'js-cookie';
-
+import { push } from 'connected-react-router';
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
@@ -40,6 +40,7 @@ export const login = ({ email, password }) => {
           const token = response.data.token;
           cookie.set('token', token, { expires: 1 });
           dispatch(loginSuccess(claimsFromToken(token)));
+          dispatch(push('/'));
         },
         err => {
           dispatch(loginFailure(err));

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { Component } from 'react';
 
 class SignInForm extends Component {
