@@ -4,6 +4,9 @@ import { push } from 'connected-react-router';
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';
 
 const loginRequest = () => {
   return { type: LOGIN_REQUEST };
@@ -46,5 +49,38 @@ export const login = ({ email, password }) => {
           dispatch(loginFailure(err));
         }
       );
+  };
+};
+
+const logoutRequest = () => {
+  return {
+    type: LOGOUT_REQUEST
+  };
+};
+
+const logoutSuccess = () => {
+  return {
+    type: LOGOUT_SUCCESS
+  };
+};
+
+const logoutFailure = () => {
+  return {
+    type: LOGOUT_FAILURE
+  };
+};
+
+// TODO: server logout?
+export const logout = () => {
+  return dispatch => {
+    return Promise.resolve().then(() => {
+      try {
+        dispatch(logoutRequest());
+        cookie.remove('token');
+        dispatch(logoutSuccess());
+      } catch (err) {
+        dispatch(logoutFailure());
+      }
+    });
   };
 };
