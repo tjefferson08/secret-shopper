@@ -5,13 +5,15 @@ defmodule SecretshopperWeb.UserController do
   alias Secretshopper.Repo
 
   plug(:scrub_params, "user" when action in [:create])
+  plug(Secretshopper.AuthPipeline when action in [:show])
 
   def show(conn, %{"id" => id}) do
     case Repo.get(User, id) do
       nil ->
         conn
         |> put_status(404)
-        |> json(%{ error: "Not Found" })
+        |> json(%{error: "Not Found"})
+
       user ->
         render(conn, "show.json", user: user)
     end
