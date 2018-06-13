@@ -3,6 +3,30 @@ defmodule SecretshopperWeb.UserControllerTest do
 
   import Secretshopper.Factory
 
+
+  describe "show/2" do
+    test "Shows JSON for a user when it exists" do
+      user = insert(:user)
+      conn =
+        build_conn()
+        |> get("/api/users/#{user.id}")
+
+      assert json_response(conn, 200) == %{
+               "user" => %{"email" => user.email, "name" => user.name}
+             }
+    end
+
+    test "Renders 404 when user not found" do
+      conn =
+        build_conn()
+        |> get("/api/users/999")
+
+      assert json_response(conn, 404) == %{
+               "error" => "Not Found"
+             }
+    end
+  end
+
   describe "create/2" do
     test "Creates user and responds with the payload when attrs are valid" do
       params =
