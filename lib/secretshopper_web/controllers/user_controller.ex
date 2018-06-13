@@ -7,8 +7,14 @@ defmodule SecretshopperWeb.UserController do
   plug(:scrub_params, "user" when action in [:create])
 
   def show(conn, %{"id" => id}) do
-    user = Repo.get!(User, id)
-    render(conn, "show.html", user: user)
+    case Repo.get(User, id) do
+      nil ->
+        conn
+        |> put_status(404)
+        |> json(%{ error: "Not Found" })
+      user ->
+        render(conn, "show.json", user: user)
+    end
   end
 
   def new(conn, _params) do
