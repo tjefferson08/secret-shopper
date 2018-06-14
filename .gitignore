@@ -28,3 +28,4 @@ npm-debug.log
 
 /priv/clientjs/node_modules
 /priv/clientjs/build
+/.projectile

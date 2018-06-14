@@ -18,6 +18,7 @@ defmodule SecretshopperWeb.Router do
       pipe_through(:api)
       resources("/sessions", SessionController, only: [:create])
       resources("/users", UserController, only: [:show, :new, :create])
+      resources("/recipes", RecipeController, only: [:index])
     end
   end
 end
