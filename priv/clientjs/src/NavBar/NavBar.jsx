@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -10,15 +10,19 @@ const NavBar = ({ isAuthenticated }) => (
   </ul>
 );
 
-const LoggedInLinks = () => [
-  <DashboardLink key="dashboard" />,
-  <SignOutLink key="signOut" />
-];
+const LoggedInLinks = () => (
+  <Fragment>
+    <DashboardLink key="dashboard" />
+    <SignOutLink key="signOut" />
+  </Fragment>
+);
 
-const LoggedOutLinks = () => [
-  <SignUpLink key="signUp" />,
-  <SignInLink key="signIn" />
-];
+const LoggedOutLinks = () => (
+  <Fragment>
+    <SignUpLink key="signUp" />
+    <SignInLink key="signIn" />
+  </Fragment>
+);
 
 const DashboardLink = () => {
   return (
