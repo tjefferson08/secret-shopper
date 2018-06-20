@@ -7,9 +7,9 @@ defmodule Secretshopper.RecipeImportTest do
     val = RecipeImport.fetch("https://www.allrecipes.com/recipe/165190/spicy-vegan-potato-curry/")
 
     assert val == %{
-             cookTime: "PT30M",
-             prepTime: "PT30M",
-             totalTime: "PT1H",
+             cook_time: "PT30M",
+             prep_time: "PT30M",
+             total_time: "PT1H",
              ingredients: [
                "4 potatoes, peeled and cubed",
                "2 tablespoons vegetable oil",
@@ -37,7 +37,7 @@ defmodule Secretshopper.RecipeImportTest do
     val = RecipeImport.fetch("https://www.allrecipes.com/recipe/8667/jays-jerk-chicken/")
 
     assert val == %{
-             cookTime: "PT30M",
+             cook_time: "PT30M",
              ingredients: [
                "6 green onions, chopped",
                "1 onion, chopped",
@@ -58,8 +58,8 @@ defmodule Secretshopper.RecipeImportTest do
                "Preheat grill for high heat.",
                "Lightly oil grill grate. Cook chicken on the prepared grill 6 to 8 minutes, until juices run clear."
              ],
-             prepTime: "PT15M",
-             totalTime: "PT4H45M"
+             prep_time: "PT15M",
+             total_time: "PT4H45M"
            }
   end
 
@@ -67,7 +67,7 @@ defmodule Secretshopper.RecipeImportTest do
     val = RecipeImport.fetch("https://www.allrecipes.com/recipe/223042/chicken-parmesan/")
 
     assert val == %{
-             cookTime: "PT20M",
+             cook_time: "PT20M",
              ingredients: [
                "4 skinless, boneless chicken breast halves",
                "salt and freshly ground black pepper to taste",
@@ -94,8 +94,8 @@ defmodule Secretshopper.RecipeImportTest do
                "Place chicken in a baking dish and top each breast with about 1/3 cup of tomato sauce. Layer each chicken breast with equal amounts of mozzarella cheese, fresh basil, and provolone cheese. Sprinkle 1 to 2 tablespoons of Parmesan cheese on top and drizzle with 1 tablespoon olive oil.",
                "Bake in the preheated oven until cheese is browned and bubbly, and chicken breasts are no longer pink in the center, 15 to 20 minutes. An instant-read thermometer inserted into the center should read at least 165 degrees F (74 degrees C)."
              ],
-             prepTime: "PT25M",
-             totalTime: "PT1H"
+             prep_time: "PT25M",
+             total_time: "PT1H"
            }
   end
 end
