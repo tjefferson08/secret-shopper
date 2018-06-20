@@ -2,15 +2,25 @@
 #
 #     mix run priv/repo/seeds.exs
 #
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     Secretshopper.Repo.insert!(%Secretshopper.SomeSchema{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
 alias Secretshopper.User
+alias Secretshopper.Recipe
+alias Secretshopper.RecipeImport
 
 %User{}
 |> User.changeset(%{"email" => "bob@bob.com", "name" => "Bob", "password" => "password"})
 |> Secretshopper.Repo.insert!()
+
+recipe_data = [
+  RecipeImport.fetch("https://www.allrecipes.com/recipe/165190/spicy-vegan-potato-curry/"),
+  RecipeImport.fetch("https://www.allrecipes.com/recipe/8667/jays-jerk-chicken/"),
+  RecipeImport.fetch("https://www.allrecipes.com/recipe/223042/chicken-parmesan/")
+]
+
+Enum.map(
+  recipe_data,
+  fn recipe_params ->
+    %Recipe{}
+    |> Recipe.changeset(recipe_params)
+    |> Secretshopper.Repo.insert!()
+  end
+)

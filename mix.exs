@@ -46,6 +46,8 @@ defmodule Secretshopper.Mixfile do
       {:phoenix_html, "~> 2.10"},
       {:phoenix_pubsub, "~> 1.0"},
       {:postgrex, ">= 0.0.0"},
+      {:timex, "~> 3.3"},
+      {:timex_ecto, "~> 3.3"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:ex_machina, "~> 2.2", only: :test}
     ]
