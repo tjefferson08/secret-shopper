@@ -9,3 +9,8 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+alias Secretshopper.User
+
+%User{}
+|> User.changeset(%{"email" => "bob@bob.com", "name" => "Bob", "password" => "password"})
+|> Secretshopper.Repo.insert!()
