@@ -20,6 +20,7 @@ defmodule Secretshopper.User do
     |> cast(params, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)
     |> validate_format(:email, ~r/@/)
+    |> hash_password
   end
 
   def registration_changeset(struct, params) do
@@ -27,7 +28,6 @@ defmodule Secretshopper.User do
     |> changeset(params)
     |> validate_length(:password, min: 6, max: 100)
     |> validate_confirmation(:password, message: "does not match password!", required: true)
-    |> hash_password
   end
 
   defp hash_password(changeset) do

@@ -4,7 +4,8 @@ defmodule Secretshopper.UserFactory do
       def user_factory do
         %Secretshopper.User{
           name: "Jane Smith",
-          email: sequence(:email, &"email-#{&1}@example.com")
+          email: sequence(:email, &"email-#{&1}@example.com"),
+          password_hash: "<hashed pw>"
         }
       end
     end

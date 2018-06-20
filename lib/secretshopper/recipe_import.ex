@@ -8,17 +8,17 @@ defmodule Secretshopper.RecipeImport do
   end
 
   defp parse(body) do
-    [cookTime] =
+    [cook_time] =
       body
       |> Floki.find("[itemprop=\"cookTime\"]")
       |> Floki.attribute("datetime")
 
-    [prepTime] =
+    [prep_time] =
       body
       |> Floki.find("[itemprop=\"prepTime\"]")
       |> Floki.attribute("datetime")
 
-    [totalTime] =
+    [total_time] =
       body
       |> Floki.find("[itemprop=\"totalTime\"]")
       |> Floki.attribute("datetime")
@@ -37,9 +37,9 @@ defmodule Secretshopper.RecipeImport do
       |> Enum.filter(fn str -> String.length(str) > 0 end)
 
     %{
-      cookTime: cookTime,
-      prepTime: prepTime,
-      totalTime: totalTime,
+      cook_time: cook_time,
+      prep_time: prep_time,
+      total_time: total_time,
       ingredients: ingredients,
       instructions: instructions
     }
