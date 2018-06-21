@@ -8,7 +8,7 @@ defmodule Secretshopper.Recipe do
     field(:cook_time, Timex.Ecto.Time)
     field(:prep_time, Timex.Ecto.Time)
     field(:total_time, Timex.Ecto.Time)
-
+    embeds_many(:instructions, Instruction)
     timestamps()
   end
 
@@ -21,14 +21,36 @@ defmodule Secretshopper.Recipe do
 
     struct
     |> cast(params, @required_fields ++ @optional_fields)
+    |> cast_embed(:instructions, required: true)
     |> validate_required(@required_fields)
   end
 
-  defp parse_durations(%{cook_time: cook_time, prep_time: prep_time, total_time: total_time}) do
+  defp parse_durations(
+         map = %{cook_time: cook_time, prep_time: prep_time, total_time: total_time}
+       ) do
     %{
-      cook_time: Duration.parse!(cook_time),
-      prep_time: Duration.parse!(prep_time),
-      total_time: Duration.parse!(total_time)
+      map
+      | cook_time: Duration.parse!(cook_time),
+        prep_time: Duration.parse!(prep_time),
+        total_time: Duration.parse!(total_time)
     }
+  end
+end
+
+defmodule Instruction do
+  use Ecto.Schema
+  import Ecto.Changeset
+
+  @required_fields ~w(text)a
+  @optional_fields ~w()a
+
+  embedded_schema do
+    field(:text, :string)
+  end
+
+  def changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, @required_fields ++ @optional_fields)
+    |> validate_required(@required_fields)
   end
 end
