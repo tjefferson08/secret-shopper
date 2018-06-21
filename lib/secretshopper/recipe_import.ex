@@ -35,6 +35,7 @@ defmodule Secretshopper.RecipeImport do
       |> String.split("\n")
       |> Enum.map(fn str -> String.trim(str) end)
       |> Enum.filter(fn str -> String.length(str) > 0 end)
+      |> Enum.map(fn str -> %{text: str} end)
 
     %{
       cook_time: cook_time,
