@@ -6,9 +6,9 @@ alias Secretshopper.User
 alias Secretshopper.Recipe
 alias Secretshopper.RecipeImport
 
-# %User{}
-# |> User.changeset(%{"email" => "bob@bob.com", "name" => "Bob", "password" => "password"})
-# |> Secretshopper.Repo.insert!()
+%User{}
+|> User.changeset(%{"email" => "bob@bob.com", "name" => "Bob", "password" => "password"})
+|> Secretshopper.Repo.insert!()
 
 recipe_data = [
   RecipeImport.fetch("https://www.allrecipes.com/recipe/165190/spicy-vegan-potato-curry/"),
@@ -16,13 +16,11 @@ recipe_data = [
   RecipeImport.fetch("https://www.allrecipes.com/recipe/223042/chicken-parmesan/")
 ]
 
-IO.inspect(recipe_data)
 Enum.map(
   recipe_data,
   fn recipe_params ->
     %Recipe{}
     |> Recipe.changeset(recipe_params)
-    |> IO.inspect()
     |> Secretshopper.Repo.insert!()
   end
 )
