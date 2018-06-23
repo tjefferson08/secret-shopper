@@ -9,6 +9,7 @@ defmodule Secretshopper.Recipe do
     field(:prep_time, Timex.Ecto.Time)
     field(:total_time, Timex.Ecto.Time)
     embeds_many(:instructions, Instruction)
+    many_to_many :ingredients, Secretshopper.Ingredient, join_through: "recipes_ingredients"
     timestamps()
   end
 
@@ -23,6 +24,7 @@ defmodule Secretshopper.Recipe do
     |> cast(params, @required_fields ++ @optional_fields)
     |> cast_embed(:instructions, required: true)
     |> validate_required(@required_fields)
+    |> cast_assoc(:ingredients)
   end
 
   defp parse_durations(

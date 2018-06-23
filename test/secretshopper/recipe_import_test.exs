@@ -12,20 +12,20 @@ defmodule Secretshopper.RecipeImportTest do
              prep_time: "PT30M",
              total_time: "PT1H",
              ingredients: [
-               "4 potatoes, peeled and cubed",
-               "2 tablespoons vegetable oil",
-               "1 yellow onion, diced",
-               "3 cloves garlic, minced",
-               "2 teaspoons ground cumin",
-               "1 1/2 teaspoons cayenne pepper",
-               "4 teaspoons curry powder",
-               "4 teaspoons garam masala",
-               "1 (1 inch) piece fresh ginger root, peeled and minced",
-               "2 teaspoons salt",
-               "1 (14.5 ounce) can diced tomatoes",
-               "1 (15 ounce) can garbanzo beans (chickpeas), rinsed and drained",
-               "1 (15 ounce) can peas, drained",
-               "1 (14 ounce) can coconut milk"
+               %{name: "4 potatoes, peeled and cubed"},
+               %{name: "2 tablespoons vegetable oil"},
+               %{name: "1 yellow onion, diced"},
+               %{name: "3 cloves garlic, minced"},
+               %{name: "2 teaspoons ground cumin"},
+               %{name: "1 1/2 teaspoons cayenne pepper"},
+               %{name: "4 teaspoons curry powder"},
+               %{name: "4 teaspoons garam masala"},
+               %{name: "1 (1 inch) piece fresh ginger root, peeled and minced"},
+               %{name: "2 teaspoons salt"},
+               %{name: "1 (14.5 ounce) can diced tomatoes"},
+               %{name: "1 (15 ounce) can garbanzo beans (chickpeas), rinsed and drained"},
+               %{name: "1 (15 ounce) can peas, drained"},
+               %{name: "1 (14 ounce) can coconut milk"}
              ],
              instructions: [
                %{
@@ -50,18 +50,18 @@ defmodule Secretshopper.RecipeImportTest do
     assert val == %{
              cook_time: "PT30M",
              ingredients: [
-               "6 green onions, chopped",
-               "1 onion, chopped",
-               "1 jalapeno pepper, seeded and minced",
-               "3/4 cup soy sauce",
-               "1/2 cup distilled white vinegar",
-               "1/4 cup vegetable oil",
-               "2 tablespoons brown sugar",
-               "1 tablespoon chopped fresh thyme",
-               "1/2 teaspoon ground cloves",
-               "1/2 teaspoon ground nutmeg",
-               "1/2 teaspoon ground allspice",
-               "1 1/2 pounds skinless, boneless chicken breast halves"
+               %{name: "6 green onions, chopped"},
+               %{name: "1 onion, chopped"},
+               %{name: "1 jalapeno pepper, seeded and minced"},
+               %{name: "3/4 cup soy sauce"},
+               %{name: "1/2 cup distilled white vinegar"},
+               %{name: "1/4 cup vegetable oil"},
+               %{name: "2 tablespoons brown sugar"},
+               %{name: "1 tablespoon chopped fresh thyme"},
+               %{name: "1/2 teaspoon ground cloves"},
+               %{name: "1/2 teaspoon ground nutmeg"},
+               %{name: "1/2 teaspoon ground allspice"},
+               %{name: "1 1/2 pounds skinless, boneless chicken breast halves"}
              ],
              instructions: [
                %{
@@ -93,19 +93,19 @@ defmodule Secretshopper.RecipeImportTest do
     assert val == %{
              cook_time: "PT20M",
              ingredients: [
-               "4 skinless, boneless chicken breast halves",
-               "salt and freshly ground black pepper to taste",
-               "2 eggs",
-               "1 cup panko bread crumbs, or more as needed",
-               "1/2 cup grated Parmesan cheese",
-               "2 tablespoons all-purpose flour, or more if needed",
-               "1 cup olive oil for frying",
-               "1/2 cup prepared tomato sauce",
-               "1/4 cup fresh mozzarella, cut into small cubes",
-               "1/4 cup chopped fresh basil",
-               "1/2 cup grated provolone cheese",
-               "1/4 cup grated Parmesan cheese",
-               "1 tablespoon olive oil"
+               %{name: "4 skinless, boneless chicken breast halves"},
+               %{name: "salt and freshly ground black pepper to taste"},
+               %{name: "2 eggs"},
+               %{name: "1 cup panko bread crumbs, or more as needed"},
+               %{name: "1/2 cup grated Parmesan cheese"},
+               %{name: "2 tablespoons all-purpose flour, or more if needed"},
+               %{name: "1 cup olive oil for frying"},
+               %{name: "1/2 cup prepared tomato sauce"},
+               %{name: "1/4 cup fresh mozzarella, cut into small cubes"},
+               %{name: "1/4 cup chopped fresh basil"},
+               %{name: "1/2 cup grated provolone cheese"},
+               %{name: "1/4 cup grated Parmesan cheese"},
+               %{name: "1 tablespoon olive oil"}
              ],
              instructions: [
                %{text: "Preheat an oven to 450 degrees F (230 degrees C)."},

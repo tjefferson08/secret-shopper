@@ -26,7 +26,9 @@ defmodule Secretshopper.RecipeImport do
     ingredients =
       body
       |> Floki.find("[itemprop=\"ingredients\"],[itemprop=\"recipeIngredient\"]")
-      |> Enum.map(fn {_tag, _attrs, text} -> text |> Enum.fetch!(0) end)
+      |> Enum.map(fn {_tag, _attrs, text} ->
+        %{name: Enum.fetch!(text, 0)}
+      end)
 
     instructions =
       body
