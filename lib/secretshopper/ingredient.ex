@@ -4,7 +4,7 @@ defmodule Secretshopper.Ingredient do
 
   schema "ingredients" do
     field(:name, :string)
-
+    many_to_many :recipes, Secretshopper.Recipe, join_through: "recipes_recipes"
     timestamps()
   end
 
