@@ -2,9 +2,10 @@ defmodule Secretshopper.Ingredient do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Poison.Encoder, except: [:recipes, :__meta__, :inserted_at, :updated_at]}
   schema "ingredients" do
     field(:name, :string)
-    many_to_many :recipes, Secretshopper.Recipe, join_through: "recipes_recipes"
+    many_to_many(:recipes, Secretshopper.Recipe, join_through: "recipes_recipes")
     timestamps()
   end
 
