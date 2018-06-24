@@ -23,7 +23,13 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
+  "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
+  },
   "devDependencies": {
+    "enzyme-to-json": "^3.3.4",
     "nock": "^9.3.0",
     "redux-mock-store": "^1.5.3"
   }
