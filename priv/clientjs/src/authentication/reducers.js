@@ -19,37 +19,37 @@ const authentication = (state = initialState(), action) => {
   switch (action.type) {
     case LOGIN_REQUEST:
       return {
-        isFetching: true,
-        ...state
+        ...state,
+        isFetching: true
       };
     case LOGIN_SUCCESS:
       return {
+        ...state,
         isAuthenticated: true,
         isFetching: false,
-        currentUser: action.user,
-        ...state
+        currentUser: action.user
       };
     case LOGIN_FAILURE:
       return {
+        ...state,
         isAuthenticated: false,
-        isFetching: false,
-        ...state
+        isFetching: false
       };
     case LOGOUT_REQUEST:
       return {
-        isFetching: true,
-        ...state
+        ...state,
+        isFetching: true
       };
     case LOGOUT_SUCCESS:
       return {
+        ...state,
         isFetching: false,
-        isAuthenticated: false,
-        ...state
+        isAuthenticated: false
       };
     case LOGOUT_FAILURE:
       return {
-        isFetching: false,
-        ...state
+        ...state,
+        isFetching: false
       };
     default:
       return state;
