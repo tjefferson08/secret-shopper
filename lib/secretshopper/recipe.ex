@@ -3,13 +3,17 @@ defmodule Secretshopper.Recipe do
   import Ecto.Changeset
   alias Timex.Duration
 
+  # "quick" way to serialize, kinda like including AMS::Serializable I
+  # think. Or you can write a view module... IDK!
+  @derive {Poison.Encoder, except: [:__meta__, :inserted_at, :updated_at]}
+
   schema "recipes" do
     field(:name, :string)
     field(:cook_time, Timex.Ecto.Time)
     field(:prep_time, Timex.Ecto.Time)
     field(:total_time, Timex.Ecto.Time)
     embeds_many(:instructions, Instruction)
-    many_to_many :ingredients, Secretshopper.Ingredient, join_through: "recipes_ingredients"
+    many_to_many(:ingredients, Secretshopper.Ingredient, join_through: "recipes_ingredients")
     timestamps()
   end
 
