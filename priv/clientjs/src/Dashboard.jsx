@@ -2,15 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchRecipes } from './recipes/actions';
-import RecipeCard from './recipes/RecipeCard';
-import RecipeSet from './recipes/RecipeSet';
+import RecipeList from './RecipeList/RecipeList';
 
 class Dashboard extends Component {
   componentDidMount() {
     this.props.onMount();
   }
   render() {
-    return <RecipeSet recipes={this.props.recipes} />;
+    return <RecipeList recipes={this.props.recipes} />;
   }
 }
 
@@ -26,4 +25,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Dashboard);
