@@ -29,7 +29,6 @@ defmodule Secretshopper.Seeds do
 
   defp insert_recipe(recipe_params) do
     ingredients = insert_ingredients(recipe_params[:ingredients])
-    IO.inspect(ingredients)
 
     %Recipe{}
     |> Recipe.changeset(recipe_params)
