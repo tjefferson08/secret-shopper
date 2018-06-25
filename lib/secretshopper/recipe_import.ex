@@ -8,6 +8,18 @@ defmodule Secretshopper.RecipeImport do
   end
 
   defp parse(body) do
+    [name] =
+      body
+      |> Floki.find("h1[itemprop=\"name\"], h2[itemprop=\"name\"], h3[itemprop=\"name\"]")
+      |> Enum.map(fn {_tag, _attrs, text} ->
+        Enum.fetch!(text, 0)
+      end)
+
+    [image_url] =
+      body
+      |> Floki.find("[itemprop=\"image\"]")
+      |> Floki.attribute("src")
+
     [cook_time] =
       body
       |> Floki.find("[itemprop=\"cookTime\"]")
@@ -40,6 +52,8 @@ defmodule Secretshopper.RecipeImport do
       |> Enum.map(fn str -> %{text: str} end)
 
     %{
+      name: name,
+      image_url: image_url,
       cook_time: cook_time,
       prep_time: prep_time,
       total_time: total_time,

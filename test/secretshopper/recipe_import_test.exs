@@ -8,6 +8,8 @@ defmodule Secretshopper.RecipeImportTest do
     val = RecipeImport.fetch("https://www.allrecipes.com/recipe/165190/spicy-vegan-potato-curry/")
 
     assert val == %{
+             name: "Spicy Vegan Potato Curry",
+             image_url: "https://images.media-allrecipes.com/userphotos/560x315/4581394.jpg",
              cook_time: "PT30M",
              prep_time: "PT30M",
              total_time: "PT1H",
@@ -48,6 +50,8 @@ defmodule Secretshopper.RecipeImportTest do
     val = RecipeImport.fetch("https://www.allrecipes.com/recipe/8667/jays-jerk-chicken/")
 
     assert val == %{
+             name: "Jay's Jerk Chicken",
+             image_url: "https://images.media-allrecipes.com/userphotos/560x315/220542.jpg",
              cook_time: "PT30M",
              ingredients: [
                %{name: "6 green onions, chopped"},
@@ -91,6 +95,8 @@ defmodule Secretshopper.RecipeImportTest do
     val = RecipeImport.fetch("https://www.allrecipes.com/recipe/223042/chicken-parmesan/")
 
     assert val == %{
+             name: "Chicken Parmesan",
+             image_url: "https://images.media-allrecipes.com/userphotos/560x315/1036363.jpg",
              cook_time: "PT20M",
              ingredients: [
                %{name: "4 skinless, boneless chicken breast halves"},
