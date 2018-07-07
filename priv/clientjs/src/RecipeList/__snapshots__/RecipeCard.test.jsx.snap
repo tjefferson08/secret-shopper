@@ -10,8 +10,8 @@ exports[`it should render all recipe fields when showDetails is true 1`] = `
     <div
       className="header"
     >
-      <i
-        className="far fa-star fa-2x"
+      <FavoriteBadge
+        onClick={[Function]}
       />
       <h3
         className="name"
@@ -20,6 +20,7 @@ exports[`it should render all recipe fields when showDetails is true 1`] = `
       </h3>
     </div>
     <img
+      alt="Beans and rice"
       className="thumbnail"
     />
     <Time
@@ -78,8 +79,8 @@ exports[`it should render the main recipe fields 1`] = `
     <div
       className="header"
     >
-      <i
-        className="far fa-star fa-2x"
+      <FavoriteBadge
+        onClick={[Function]}
       />
       <h3
         className="name"
@@ -88,6 +89,7 @@ exports[`it should render the main recipe fields 1`] = `
       </h3>
     </div>
     <img
+      alt="Beans and rice"
       className="thumbnail"
     />
     <Time

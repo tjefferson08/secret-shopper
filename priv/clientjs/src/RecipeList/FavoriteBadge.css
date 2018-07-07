@@ -1,0 +1,13 @@
+i {
+  display: inline-block;
+  vertical-align: middle;
+  padding-right: 12px;
+}
+
+i:hover {
+  cursor: pointer;
+}
+
+.fa-star {
+  color: gold;
+}

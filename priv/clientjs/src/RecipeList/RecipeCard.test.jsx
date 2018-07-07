@@ -28,7 +28,7 @@ const setupTest = () => ({
 test('it should render the main recipe fields', () => {
   store = configureMockStore([])();
   const { props } = setupTest();
-  const card = shallow(<RecipeCard store={store} {...props} />);
+  const card = shallow(<RecipeCard store={store} {...props} />).dive();
   expect(card).toMatchSnapshot();
 });
 
@@ -36,7 +36,7 @@ test('it should render all recipe fields when showDetails is true', () => {
   store = configureMockStore([])();
   const { props } = setupTest();
   props.showDetails = true;
-  const card = shallow(<RecipeCard store={store} {...props} />);
+  const card = shallow(<RecipeCard store={store} {...props} />).dive();
   expect(card).toMatchSnapshot();
 });
 
