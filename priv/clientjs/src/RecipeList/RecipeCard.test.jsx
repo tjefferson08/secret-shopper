@@ -20,13 +20,22 @@ const setupTest = () => ({
         { id: 'abc', text: 'microwave ingredients' },
         { id: 'def', text: 'eat food' }
       ]
-    }
+    },
+    showDetails: false
   }
 });
 
-test('it should render all the recipe fields', () => {
+test('it should render the main recipe fields', () => {
   store = configureMockStore([])();
   const { props } = setupTest();
+  const card = shallow(<RecipeCard store={store} {...props} />);
+  expect(card).toMatchSnapshot();
+});
+
+test('it should render all recipe fields when showDetails is true', () => {
+  store = configureMockStore([])();
+  const { props } = setupTest();
+  props.showDetails = true;
   const card = shallow(<RecipeCard store={store} {...props} />);
   expect(card).toMatchSnapshot();
 });
@@ -35,5 +44,5 @@ test('it should not blow up when rendered into DOM', () => {
   store = configureMockStore([])();
   const { props } = setupTest();
   const card = mount(<RecipeCard store={store} {...props} />);
-  expect(card).toMatchSnapshot();
+  card.unmount();
 });
