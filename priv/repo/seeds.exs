@@ -18,7 +18,17 @@ defmodule Secretshopper.Seeds do
     recipe_data = [
       RecipeImport.fetch("https://www.allrecipes.com/recipe/165190/spicy-vegan-potato-curry/"),
       RecipeImport.fetch("https://www.allrecipes.com/recipe/8667/jays-jerk-chicken/"),
-      RecipeImport.fetch("https://www.allrecipes.com/recipe/223042/chicken-parmesan/")
+      RecipeImport.fetch("https://www.allrecipes.com/recipe/223042/chicken-parmesan/"),
+      RecipeImport.fetch(
+        "https://www.allrecipes.com/recipe/233398/summer-squash-and-sausage-stew/"
+      ),
+      RecipeImport.fetch("https://www.allrecipes.com/recipe/25333/vegan-black-bean-soup/"),
+      RecipeImport.fetch(
+        "https://www.allrecipes.com/recipe/221293/vegan-black-bean-quesadillas/"
+      ),
+      RecipeImport.fetch(
+        "https://www.allrecipes.com/recipe/85452/homemade-black-bean-veggie-burgers/"
+      )
     ]
 
     Enum.map(
