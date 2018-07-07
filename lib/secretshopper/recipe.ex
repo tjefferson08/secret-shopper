@@ -9,6 +9,7 @@ defmodule Secretshopper.Recipe do
 
   schema "recipes" do
     field(:name, :string)
+    field(:image_url, :string)
     field(:cook_time, Timex.Ecto.Time)
     field(:prep_time, Timex.Ecto.Time)
     field(:total_time, Timex.Ecto.Time)
@@ -17,7 +18,7 @@ defmodule Secretshopper.Recipe do
     timestamps()
   end
 
-  @required_fields ~w(cook_time prep_time total_time)a
+  @required_fields ~w(name image_url cook_time prep_time total_time)a
   @optional_fields ~w()a
 
   @doc false

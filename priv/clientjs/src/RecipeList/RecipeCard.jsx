@@ -4,17 +4,19 @@ import PropTypes from 'prop-types';
 const RecipeCard = ({ recipe }) => {
   const {
     cook_time,
-    prep_time,
-    total_time,
+    image_url,
     ingredients,
     instructions,
-    name
+    name,
+    prep_time,
+    total_time
   } = recipe;
   return (
     <div>
       <div>
         <h2>{name || 'Unknown name'}</h2>
       </div>
+      <img className="thumbnail" src={image_url} />
       <Time label="Cook time" value={cook_time} />
       <Time label="Prep time" value={prep_time} />
       <Time label="Total time" value={total_time} />

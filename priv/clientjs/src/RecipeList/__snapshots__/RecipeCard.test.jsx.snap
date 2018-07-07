@@ -47,6 +47,9 @@ exports[`it should not blow up when rendered into DOM 1`] = `
         Beans and rice
       </h2>
     </div>
+    <img
+      className="thumbnail"
+    />
     <Time
       label="Cook time"
       value="5 minutes"
@@ -157,6 +160,9 @@ exports[`it should render all the recipe fields 1`] = `
       Beans and rice
     </h2>
   </div>
+  <img
+    className="thumbnail"
+  />
   <Time
     label="Cook time"
     value="5 minutes"
