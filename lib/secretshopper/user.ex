@@ -8,6 +8,7 @@ defmodule Secretshopper.User do
     field(:name, :string)
     field(:password, :string, virtual: true)
     field(:password_hash, :string)
+    many_to_many(:recipes, Secretshopper.Recipe, join_through: Secretshopper.RecipeUser)
     timestamps()
   end
 

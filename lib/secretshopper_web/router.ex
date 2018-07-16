@@ -16,9 +16,10 @@ defmodule SecretshopperWeb.Router do
   scope "/", SecretshopperWeb do
     scope "/api" do
       pipe_through(:api)
+      resources("/favorites", FavoriteController, only: [:index, :create, :delete])
+      resources("/recipes", RecipeController, only: [:index])
       resources("/sessions", SessionController, only: [:create])
       resources("/users", UserController, only: [:show, :new, :create])
-      resources("/recipes", RecipeController, only: [:index])
     end
   end
 end
