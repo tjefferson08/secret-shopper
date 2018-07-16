@@ -8,5 +8,5 @@ defmodule Secretshopper.AuthPipeline do
 
   plug(Guardian.Plug.VerifyHeader, claims: @claims, realm: "Bearer")
   plug(Guardian.Plug.EnsureAuthenticated)
-  plug(Guardian.Plug.LoadResource, allow_blank: true)
+  plug(Guardian.Plug.LoadResource)
 end

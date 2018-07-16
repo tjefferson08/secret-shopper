@@ -11,7 +11,8 @@ defmodule Secretshopper.RecipeFactory do
           cook_time: Duration.from_clock({0, 5, 0, 0}),
           prep_time: Duration.from_clock({0, 5, 0, 0}),
           total_time: Duration.from_clock({0, 10, 0, 0}),
-          ingredients: [build(:ingredient)]
+          ingredients: [build(:ingredient)],
+          users: [build(:user)]
         }
       end
     end
