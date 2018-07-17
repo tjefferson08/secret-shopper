@@ -35,7 +35,6 @@ defmodule Secretshopper.Mixfile do
     [
       {:bcrypt_elixir, "~> 0.12"},
       {:comeonin, "~> 4.0"},
-      {:cors_plug, "~> 1.5"},
       {:cowboy, "~> 1.0"},
       {:floki, "~> 0.20.2"},
       {:gettext, "~> 0.11"},
