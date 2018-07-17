@@ -1,4 +1,4 @@
-import axios from 'axios';
+import http from '../http';
 
 export const FETCH_RECIPES_REQUEST = 'FETCH_RECIPES_REQUEST';
 export const FETCH_RECIPES_SUCCESS = 'FETCH_RECIPES_SUCCESS';
@@ -25,8 +25,8 @@ const fetchRecipesFailure = err => ({
 export const fetchRecipes = () => {
   return dispatch => {
     dispatch(fetchRecipesRequest());
-    return axios
-      .get(`${process.env.REACT_APP_API_URL}/api/recipes`)
+    return http
+      .get('/api/recipes')
       .then(
         response => dispatch(fetchRecipesSuccess(response.data.recipes)),
         err => dispatch(fetchRecipesFailure(err))
@@ -42,10 +42,11 @@ const setFavoriteSuccess = recipeId => ({
   recipeId,
   type: SET_FAVORITE_SUCCESS
 });
-// const setFavoriteFailure = recipeId => ({
-//   recipeId,
-//   type: SET_FAVORITE_FAILURE
-// });
+const setFavoriteFailure = (recipeId, err) => ({
+  recipeId,
+  err,
+  type: SET_FAVORITE_FAILURE
+});
 
 const setUnfavoriteRequest = recipeId => ({
   recipeId,
@@ -55,24 +56,29 @@ const setUnfavoriteSuccess = recipeId => ({
   recipeId,
   type: SET_UNFAVORITE_SUCCESS
 });
-// const setUnfavoriteFailure = recipeId => ({
-//   recipeId,
-//   type: SET_UNFAVORITE_FAILURE
-// });
+const setUnfavoriteFailure = (recipeId, err) => ({
+  recipeId,
+  err,
+  type: SET_UNFAVORITE_FAILURE
+});
 
 export const setFavoriteStatus = (recipeId, favoriteStatus) => {
   return dispatch => {
     return Promise.resolve().then(() => {
       if (favoriteStatus) {
         dispatch(setFavoriteRequest(recipeId));
-        dispatch(setFavoriteSuccess(recipeId));
-        // dispatch(setFavoriteFailure(recipeId));
-        // TODO make axios request
+        return http
+          .post('/api/favorites', {
+            recipe_id: recipeId
+          })
+          .then(() => dispatch(setFavoriteSuccess(recipeId)))
+          .catch(err => dispatch(setFavoriteFailure(recipeId, err)));
       } else {
         dispatch(setUnfavoriteRequest(recipeId));
-        dispatch(setUnfavoriteSuccess(recipeId));
-        // TODO make axios request
-        // dispatch(setUnfavoriteFailure(recipeId));
+        return http
+          .delete(`/api/favorites/${recipeId}`)
+          .then(() => dispatch(setUnfavoriteSuccess(recipeId)))
+          .catch(err => dispatch(setUnfavoriteFailure(recipeId, err)));
       }
     });
   };
