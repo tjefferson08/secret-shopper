@@ -11,9 +11,9 @@ import {
   fetchRecipes,
   setFavoriteStatus
 } from './actions';
+import nock, { isDone } from '../../test/nock';
 
 import configureMockStore from 'redux-mock-store';
-import nock from 'nock';
 import thunk from 'redux-thunk';
 
 const middlewares = [thunk];
@@ -22,19 +22,15 @@ const mockStore = configureMockStore(middlewares);
 describe('fetching recipes', () => {
   describe('successful request', () => {
     beforeEach(() => {
-      nock(process.env.REACT_APP_API_URL)
+      nock()
         .get('/api/recipes')
-        .reply(
-          200,
-          {
-            recipes: [{ id: '123', name: 'Mac n Cheese' }]
-          },
-          { 'Access-Control-Allow-Origin': '*' }
-        );
+        .reply(200, {
+          recipes: [{ id: '123', name: 'Mac n Cheese' }]
+        });
     });
 
     afterEach(() => {
-      expect(nock.isDone()).toBe(true);
+      expect(isDone()).toBe(true);
     });
 
     test('creates FETCH_RECIPES_REQUEST and FETCH_RECIPES_SUCCESS', () => {
@@ -54,9 +50,9 @@ describe('fetching recipes', () => {
 
   describe('fetch failure', () => {
     test('creates FETCH_RECIPES_REQUEST, then FETCH_RECIPES_FAILURE', () => {
-      nock(process.env.REACT_APP_API_URL)
+      nock()
         .get('/api/recipes')
-        .reply(500, {}, { 'Access-Control-Allow-Origin': '*' });
+        .reply(500, {});
 
       const expectedActions = [
         { type: FETCH_RECIPES_REQUEST },
@@ -72,10 +68,30 @@ describe('fetching recipes', () => {
 });
 
 describe('favoriting recipes', () => {
-  test('should dispatch favorite request and then success actions', () => {
+  test('successful request should dispatch request, then success', () => {
+    nock()
+      .post('/api/favorites', { recipe_id: 123 })
+      .reply(200, {});
+
     const expectedActions = [
       { recipeId: 123, type: SET_FAVORITE_REQUEST },
       { recipeId: 123, type: SET_FAVORITE_SUCCESS }
+    ];
+    const store = mockStore({});
+
+    return store.dispatch(setFavoriteStatus(123, true)).then(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+
+  test('unsuccessful request should dispatch request, then failure', () => {
+    nock()
+      .post('/api/favorites', { recipe_id: 123 })
+      .reply(500, {});
+
+    const expectedActions = [
+      { recipeId: 123, type: SET_FAVORITE_REQUEST },
+      { recipeId: 123, type: SET_FAVORITE_FAILURE, err: expect.any(Error) }
     ];
     const store = mockStore({});
 
@@ -87,9 +103,29 @@ describe('favoriting recipes', () => {
 
 describe('unfavoriting recipes', () => {
   test('should dispatch unfavorite request and then success actions', () => {
+    nock()
+      .delete('/api/favorites/123')
+      .reply(200, {});
+
     const expectedActions = [
       { recipeId: 123, type: SET_UNFAVORITE_REQUEST },
       { recipeId: 123, type: SET_UNFAVORITE_SUCCESS }
+    ];
+    const store = mockStore({});
+
+    return store.dispatch(setFavoriteStatus(123, false)).then(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+
+  test('unsuccessful request should dispatch unfavorite request, then failure actions', () => {
+    nock()
+      .delete('/api/favorites/123')
+      .reply(500, {});
+
+    const expectedActions = [
+      { recipeId: 123, type: SET_UNFAVORITE_REQUEST },
+      { recipeId: 123, type: SET_UNFAVORITE_FAILURE, err: expect.any(Error) }
     ];
     const store = mockStore({});
 
