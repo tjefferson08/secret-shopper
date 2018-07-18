@@ -1,22 +1,16 @@
 defmodule SecretshopperWeb.UserControllerTest do
   use SecretshopperWeb.ConnCase
 
+  import Authentication.Helpers
   import Secretshopper.Factory
-  import Secretshopper.Guardian
-
-  def build_authed_conn do
-    current_user = insert(:user)
-    {:ok, token, _} = encode_and_sign(current_user, %{email: current_user.email, name: current_user.name})
-    build_conn()
-    |> put_req_header("authorization", "bearer: " <> token)
-  end
 
   describe "show/2" do
     test "Shows JSON for a user when it exists" do
       user = insert(:user)
 
       conn =
-        build_authed_conn()
+        build_conn()
+        |> authenticate_conn(user)
         |> get("/api/users/#{user.id}")
 
       assert json_response(conn, 200) == %{
@@ -25,8 +19,11 @@ defmodule SecretshopperWeb.UserControllerTest do
     end
 
     test "Renders 404 when user not found" do
+      user = insert(:user)
+
       conn =
-        build_authed_conn()
+        build_conn()
+        |> authenticate_conn(user)
         |> get("/api/users/999")
 
       assert json_response(conn, 404) == %{
