@@ -32,7 +32,7 @@ export const login = ({ email, password }) => {
   return dispatch => {
     dispatch(loginRequest());
     return axios
-      .post(`${process.env.REACT_APP_API_URL}/api/sessions`, {
+      .post('/api/sessions', {
         session: {
           email,
           password

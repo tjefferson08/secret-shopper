@@ -1,6 +1,5 @@
 import { push } from 'connected-react-router';
 import cookie from 'js-cookie';
-import nock from 'nock';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {
@@ -13,6 +12,7 @@ import {
   login,
   logout
 } from './actions';
+import nock, { isDone } from '../../test/nock';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -24,17 +24,15 @@ const token = ['abc', JSON.stringify({ email: 'bob@bob.com' }), 'def']
 describe('login', () => {
   describe('successful login', () => {
     beforeEach(() => {
-      nock(process.env.REACT_APP_API_URL).post('/api/sessions').reply(
-        200,
-        {
+      nock()
+        .post('/api/sessions')
+        .reply(200, {
           token: token
-        },
-        { 'Access-Control-Allow-Origin': '*' }
-      );
+        });
     });
 
     afterEach(() => {
-      expect(nock.isDone()).toBe(true);
+      expect(isDone()).toBe(true);
     });
 
     test('creates LOGIN_REQUEST and LOGIN_SUCCESS', () => {
