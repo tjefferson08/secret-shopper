@@ -1,25 +1,20 @@
 defmodule SecretshopperWeb.RecipeControllerTest do
   use SecretshopperWeb.ConnCase
 
+  import Authentication.Helpers
   import Secretshopper.Factory
-  import Secretshopper.Guardian
-
-  def build_authed_conn do
-    current_user = insert(:user)
-
-    {:ok, token, _} =
-      encode_and_sign(current_user, %{email: current_user.email, name: current_user.name})
-
-    build_conn()
-    |> put_req_header("authorization", "bearer: " <> token)
-  end
 
   describe "index/2" do
     test "renders all recipes" do
+      current_user = insert(:user)
+      other_user = insert(:user)
+
+      # user favorite!
       first_recipe =
         insert(
           :recipe,
           instructions: [%Instruction{text: "Cook it"}, %Instruction{text: "Eat it"}],
+          users: [current_user],
           cook_time: {0, 5, 0, 0},
           prep_time: {0, 5, 0, 0},
           total_time: {0, 10, 0, 0}
@@ -28,6 +23,7 @@ defmodule SecretshopperWeb.RecipeControllerTest do
       second_recipe =
         insert(
           :recipe,
+          users: [other_user],
           instructions: [%Instruction{text: "Make it"}, %Instruction{text: "Consume it"}],
           cook_time: {1, 0, 0, 0},
           prep_time: {0, 30, 0, 0},
@@ -35,13 +31,15 @@ defmodule SecretshopperWeb.RecipeControllerTest do
         )
 
       conn =
-        build_authed_conn()
+        build_conn()
+        |> authenticate_conn(current_user)
         |> get("/api/recipes")
 
       assert %{
                "recipes" => [
                  %{
                    "cook_time" => "5 minutes",
+                   "favorited" => true,
                    "id" => id1,
                    "instructions" => [
                      %{"text" => "Cook it"},
@@ -53,6 +51,7 @@ defmodule SecretshopperWeb.RecipeControllerTest do
                  },
                  %{
                    "cook_time" => "1 hour",
+                   "favorited" => false,
                    "id" => id2,
                    "instructions" => [
                      %{"text" => "Make it"},
