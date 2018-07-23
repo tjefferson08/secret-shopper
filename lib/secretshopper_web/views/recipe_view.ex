@@ -5,10 +5,17 @@ defmodule SecretshopperWeb.RecipeView do
   def render("index.json", %{recipes: recipes, current_user: current_user}) do
     recipes_json =
       recipes
-      |> Enum.map(fn recipe -> apply_favorite_status(recipe, current_user) end)
-      |> Enum.map(&parse_durations/1)
+      |> Enum.map(fn recipe -> prepare_recipe(recipe, current_user) end)
 
     %{recipes: recipes_json}
+  end
+
+  def render("show.json", %{recipe: recipe, current_user: current_user}) do
+    %{recipe: prepare_recipe(recipe, current_user)}
+  end
+
+  defp prepare_recipe(recipe, current_user) do
+    recipe |> apply_favorite_status(current_user) |> parse_durations
   end
 
   defp apply_favorite_status(recipe, current_user) do
