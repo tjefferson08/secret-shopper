@@ -5,7 +5,7 @@ defmodule Secretshopper.Ingredient do
   @derive {Poison.Encoder, except: [:recipes, :__meta__, :inserted_at, :updated_at]}
   schema "ingredients" do
     field(:name, :string)
-    many_to_many(:recipes, Secretshopper.Recipe, join_through: "recipes_recipes")
+    many_to_many(:recipes, Secretshopper.Recipe, join_through: "ingredients_recipes")
     timestamps()
   end
 
