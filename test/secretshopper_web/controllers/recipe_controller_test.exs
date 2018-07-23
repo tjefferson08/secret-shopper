@@ -75,4 +75,86 @@ defmodule SecretshopperWeb.RecipeControllerTest do
       assert actual_ingredient_ids2 == expected_ingredient_ids2
     end
   end
+
+  describe "show/2" do
+    test "renders non-favorited recipe" do
+      current_user = insert(:user)
+
+      recipe =
+        insert(
+          :recipe,
+          instructions: [%Instruction{text: "Cook it"}, %Instruction{text: "Eat it"}],
+          users: [],
+          cook_time: {0, 5, 0, 0},
+          prep_time: {0, 5, 0, 0},
+          total_time: {0, 10, 0, 0}
+        )
+
+      conn =
+        build_conn()
+        |> authenticate_conn(current_user)
+        |> get("/api/recipes/#{recipe.id}")
+
+      assert %{
+               "recipe" => %{
+                 "cook_time" => "5 minutes",
+                 "favorited" => false,
+                 "id" => id1,
+                 "instructions" => [
+                   %{"text" => "Cook it"},
+                   %{"text" => "Eat it"}
+                 ],
+                 "ingredients" => ingredients1,
+                 "prep_time" => "5 minutes",
+                 "total_time" => "10 minutes"
+               }
+             } = json_response(conn, 200)
+
+      assert id1 == recipe.id
+
+      expected_ingredient_ids1 = Enum.map(recipe.ingredients, fn ing -> ing.id end)
+      actual_ingredient_ids1 = Enum.map(ingredients1, fn ing -> ing["id"] end)
+      assert actual_ingredient_ids1 == expected_ingredient_ids1
+    end
+
+    test "renders favorited recipe" do
+      current_user = insert(:user)
+
+      recipe =
+        insert(
+          :recipe,
+          instructions: [%Instruction{text: "Cook it"}, %Instruction{text: "Eat it"}],
+          users: [current_user],
+          cook_time: {0, 5, 0, 0},
+          prep_time: {0, 5, 0, 0},
+          total_time: {0, 10, 0, 0}
+        )
+
+      conn =
+        build_conn()
+        |> authenticate_conn(current_user)
+        |> get("/api/recipes/#{recipe.id}")
+
+      assert %{
+               "recipe" => %{
+                 "cook_time" => "5 minutes",
+                 "favorited" => true,
+                 "id" => id1,
+                 "instructions" => [
+                   %{"text" => "Cook it"},
+                   %{"text" => "Eat it"}
+                 ],
+                 "ingredients" => ingredients1,
+                 "prep_time" => "5 minutes",
+                 "total_time" => "10 minutes"
+               }
+             } = json_response(conn, 200)
+
+      assert id1 == recipe.id
+
+      expected_ingredient_ids1 = Enum.map(recipe.ingredients, fn ing -> ing.id end)
+      actual_ingredient_ids1 = Enum.map(ingredients1, fn ing -> ing["id"] end)
+      assert actual_ingredient_ids1 == expected_ingredient_ids1
+    end
+  end
 end
