@@ -8,13 +8,23 @@ defmodule SecretshopperWeb.RecipeController do
 
   def index(conn, _params) do
     current_user = current_resource(conn)
+    current_user_id = current_user.id
 
-    # TODO: we should be able to left_join but only include the
-    # current_user data in the association (recipes_users entries
-    # could be numerous, no need to query for all that here)
     recipes =
       Repo.all(
-        from(r in Recipe, left_join: u in assoc(r, :users), preload: [:ingredients, users: u])
+        Recipe
+        |> join(:inner, [recipes], ing in assoc(recipes, :ingredients))
+        |> join(
+          :left,
+          [recipes, ing],
+          users in assoc(recipes, :users),
+
+          # only LEFT JOIN in user records for current user to keep the
+          # naive checking of users array to set "favorited" field nice
+          # and fast
+          users.id == ^current_user_id
+        )
+        |> preload([_, ing, users], ingredients: ing, users: users)
       )
 
     render(conn, "index.json", %{recipes: recipes, current_user: current_user})
