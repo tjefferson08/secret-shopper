@@ -1,9 +1,12 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 import NavBar from './NavBar';
 import configureMockStore from 'redux-mock-store';
+import { MemoryRouter } from 'react-router';
+import { render, cleanup } from 'react-testing-library';
 
 let store;
+
+afterEach(cleanup);
 
 describe('when authenticated', () => {
   beforeEach(() => {
@@ -13,9 +16,15 @@ describe('when authenticated', () => {
   });
 
   test('it should render LoggedInLinks', () => {
-    const navBar = shallow(<NavBar store={store} />);
-    expect(navBar.dive().text()).toContain('LoggedInLinks');
-    expect(navBar.dive().text()).not.toContain('LoggedOutLinks');
+    const nav = (
+      <MemoryRouter>
+        <NavBar store={store} />
+      </MemoryRouter>
+    );
+
+    const { getByText, queryByText } = render(nav);
+    expect(getByText('Sign Out')).toBeTruthy();
+    expect(queryByText('Sign In')).toBeNull();
   });
 });
 
@@ -27,8 +36,14 @@ describe('when not authenticated', () => {
   });
 
   test('it should render LoggedOutLinks', () => {
-    const navBar = shallow(<NavBar store={store} />);
-    expect(navBar.dive().text()).not.toContain('LoggedInLinks');
-    expect(navBar.dive().text()).toContain('LoggedOutLinks');
+    const nav = (
+      <MemoryRouter>
+        <NavBar store={store} />
+      </MemoryRouter>
+    );
+
+    const { getByText, queryByText } = render(nav);
+    expect(getByText('Sign In')).toBeTruthy();
+    expect(queryByText('Sign Out')).toBeNull();
   });
 });
