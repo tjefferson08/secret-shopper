@@ -96,7 +96,7 @@ defmodule Secretshopper.RecipeImportTest do
 
     assert val == %{
              name: "Chicken Parmesan",
-             image_url: "https://images.media-allrecipes.com/userphotos/560x315/1036363.jpg",
+             image_url: "https://images.media-allrecipes.com/userphotos/560x315/4572704.jpg",
              cook_time: "PT20M",
              ingredients: [
                %{name: "4 skinless, boneless chicken breast halves"},
