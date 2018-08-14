@@ -1,9 +1,11 @@
 import React from 'react';
-import { mount, shallow } from 'enzyme';
 import RecipeCard from './RecipeCard';
 import configureMockStore from 'redux-mock-store';
+import { render, cleanup } from 'react-testing-library';
 
 let store;
+
+afterEach(cleanup);
 
 const setupTest = () => ({
   props: {
@@ -22,27 +24,19 @@ const setupTest = () => ({
       ]
     },
     showDetails: false
-  }
+  },
+  store: configureMockStore([])()
 });
 
 test('it should render the main recipe fields', () => {
-  store = configureMockStore([])();
-  const { props } = setupTest();
-  const card = shallow(<RecipeCard store={store} {...props} />).dive();
-  expect(card).toMatchSnapshot();
+  const { props, store } = setupTest();
+  const { container } = render(<RecipeCard store={store} {...props} />);
+  expect(container.firstChild).toMatchSnapshot();
 });
 
 test('it should render all recipe fields when showDetails is true', () => {
-  store = configureMockStore([])();
-  const { props } = setupTest();
+  const { props, store } = setupTest();
   props.showDetails = true;
-  const card = shallow(<RecipeCard store={store} {...props} />).dive();
-  expect(card).toMatchSnapshot();
-});
-
-test('it should not blow up when rendered into DOM', () => {
-  store = configureMockStore([])();
-  const { props } = setupTest();
-  const card = mount(<RecipeCard store={store} {...props} />);
-  card.unmount();
+  const { container } = render(<RecipeCard store={store} {...props} />);
+  expect(container.firstChild).toMatchSnapshot();
 });
