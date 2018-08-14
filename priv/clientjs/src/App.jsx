@@ -6,22 +6,14 @@ import {
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createBrowserHistory } from 'history';
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
+import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import './App.css';
-import authentication from './authentication/reducers';
-import recipes from './recipes/reducers';
-import registration from './registration/reducers';
 import NavBar from './NavBar/NavBar';
 import Router from './Router';
+import rootReducer from './rootReducer';
 
 const history = createBrowserHistory();
-
-const rootReducer = combineReducers({
-  authentication,
-  recipes,
-  registration
-});
 
 const composeEnhancers =
   typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
