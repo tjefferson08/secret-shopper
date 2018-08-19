@@ -1,14 +1,20 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const RecipeShow = ({ match }) => {
+type Props = {
+  match: {
+    params: {
+      id: string
+    }
+  }
+};
+
+const RecipeShow = ({ match }: Props) => {
   return (
     <div>
       Hello, World! id: {match.params.id}
     </div>
   );
 };
-
-RecipeShow.propTypes = {};
 
 export default RecipeShow;
