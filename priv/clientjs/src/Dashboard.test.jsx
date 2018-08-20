@@ -2,16 +2,13 @@ import configureMockStore from 'redux-mock-store';
 import React from 'react';
 import { cleanup, waitForElement } from 'react-testing-library';
 import Dashboard from './Dashboard';
-import { renderWithRedux } from '../test/rendering';
+import { fireClick, renderWithRedux } from '../test/dom_testing';
 import nock, { isDone } from '../test/nock';
 
-afterEach(() => {
-  expect(isDone()).toBe(true);
-  cleanup();
-});
+afterEach(cleanup);
 
 test('it should render a list of recipes', async () => {
-  nock().get('/api/recipes').reply(200, {
+  const indexRequest = nock().get('/api/recipes').reply(200, {
     recipes: [
       {
         id: 1,
@@ -47,7 +44,6 @@ test('it should render a list of recipes', async () => {
       }
     ]
   });
-
   const { getByText, queryAllByTestId } = renderWithRedux(<Dashboard />);
 
   await waitForElement(() => getByText('Beans and rice'));
@@ -61,4 +57,58 @@ test('it should render a list of recipes', async () => {
 
   // far = Font Awesome Solid (filled in shape), so yes favorited
   expect(favoriteBadges[1].classList).toContain('fas');
+  expect(indexRequest.isDone()).toBe(true);
+});
+
+test('clicking the favorite badge should toggle favorite', async () => {
+  const indexRequest = nock().get('/api/recipes').reply(200, {
+    recipes: [
+      {
+        id: 1,
+        favorited: false,
+        name: 'Beans and rice',
+        cook_time: '5 minutes',
+        prep_time: '10 minutes',
+        total_time: '20 minutes',
+        ingredients: [
+          { id: 1, name: '1 can black beans' },
+          { id: 2, name: '1 cup basmati rice' }
+        ],
+        instructions: [
+          { id: 'abc', text: 'microwave ingredients' },
+          { id: 'def', text: 'eat food' }
+        ]
+      }
+    ]
+  });
+
+  const favoriteRequest = nock()
+    .post('/api/favorites', { recipe_id: 1 })
+    .reply(200, { message: 'OK' });
+
+  const unfavoriteRequest = nock()
+    .delete('/api/favorites/1')
+    .reply(200, { message: 'OK' });
+
+  const { debug, getByTestId, queryAllByTestId } = renderWithRedux(
+    <Dashboard />
+  );
+  await waitForElement(() => getByTestId('favorite-badge'));
+
+  const favoriteBadge = getByTestId('favorite-badge');
+  expect(favoriteBadge.classList).toContain('far');
+
+  // Setting as favorite
+  await fireClick(favoriteBadge);
+  expect(favoriteBadge.classList).not.toContain('far');
+  expect(favoriteBadge.classList).toContain('fas');
+
+  // un-favoriting
+  await fireClick(favoriteBadge);
+  expect(favoriteBadge.classList).toContain('far');
+  expect(favoriteBadge.classList).not.toContain('fas');
+
+  expect(indexRequest.isDone()).toBe(true);
+  expect(favoriteRequest.isDone()).toBe(true);
+  expect(unfavoriteRequest.isDone()).toBe(true);
 });

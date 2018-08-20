@@ -29,7 +29,10 @@ test('should handle FETCH_RECIPES_SUCCESS', () => {
 test('SET_FAVORITE_REQUEST should set favorited to true on the correct recipe', () => {
   const initialState = {
     other: 'state',
-    items: [{ id: 321, favorited: false }, { id: 123, favorited: false }]
+    byId: {
+      123: { id: 123, favorited: false },
+      321: { id: 321, favorited: false }
+    }
   };
   const action = {
     type: SET_FAVORITE_REQUEST,
@@ -37,7 +40,10 @@ test('SET_FAVORITE_REQUEST should set favorited to true on the correct recipe', 
   };
   const expectedState = {
     other: 'state',
-    items: [{ id: 321, favorited: false }, { id: 123, favorited: true }]
+    byId: {
+      123: { id: 123, favorited: true },
+      321: { id: 321, favorited: false }
+    }
   };
   expect(recipes(initialState, action)).toEqual(expectedState);
 });
@@ -45,7 +51,10 @@ test('SET_FAVORITE_REQUEST should set favorited to true on the correct recipe', 
 test('SET_FAVORITE_FAILURE should set favorited to false on the correct recipe', () => {
   const initialState = {
     other: 'state',
-    items: [{ id: 321, favorited: true }, { id: 123, favorited: true }]
+    byId: {
+      123: { id: 123, favorited: true },
+      321: { id: 321, favorited: true }
+    }
   };
   const action = {
     type: SET_FAVORITE_FAILURE,
@@ -53,7 +62,10 @@ test('SET_FAVORITE_FAILURE should set favorited to false on the correct recipe',
   };
   const expectedState = {
     other: 'state',
-    items: [{ id: 321, favorited: true }, { id: 123, favorited: false }]
+    byId: {
+      123: { id: 123, favorited: false },
+      321: { id: 321, favorited: true }
+    }
   };
   expect(recipes(initialState, action)).toEqual(expectedState);
 });
@@ -61,7 +73,10 @@ test('SET_FAVORITE_FAILURE should set favorited to false on the correct recipe',
 test('SET_UNFAVORITE_REQUEST should set favorited to false on the correct recipe', () => {
   const initialState = {
     other: 'state',
-    items: [{ id: 321, favorited: true }, { id: 123, favorited: true }]
+    byId: {
+      123: { id: 123, favorited: true },
+      321: { id: 321, favorited: true }
+    }
   };
   const action = {
     type: SET_UNFAVORITE_REQUEST,
@@ -69,7 +84,10 @@ test('SET_UNFAVORITE_REQUEST should set favorited to false on the correct recipe
   };
   const expectedState = {
     other: 'state',
-    items: [{ id: 321, favorited: true }, { id: 123, favorited: false }]
+    byId: {
+      123: { id: 123, favorited: false },
+      321: { id: 321, favorited: true }
+    }
   };
   expect(recipes(initialState, action)).toEqual(expectedState);
 });
@@ -77,7 +95,10 @@ test('SET_UNFAVORITE_REQUEST should set favorited to false on the correct recipe
 test('SET_UNFAVORITE_FAILURE should set favorited to true on the correct recipe', () => {
   const initialState = {
     other: 'state',
-    items: [{ id: 321, favorited: false }, { id: 123, favorited: false }]
+    byId: {
+      123: { id: 123, favorited: false },
+      321: { id: 321, favorited: false }
+    }
   };
   const action = {
     type: SET_UNFAVORITE_FAILURE,
@@ -85,7 +106,10 @@ test('SET_UNFAVORITE_FAILURE should set favorited to true on the correct recipe'
   };
   const expectedState = {
     other: 'state',
-    items: [{ id: 321, favorited: false }, { id: 123, favorited: true }]
+    byId: {
+      123: { id: 123, favorited: true },
+      321: { id: 321, favorited: false }
+    }
   };
   expect(recipes(initialState, action)).toEqual(expectedState);
 });
