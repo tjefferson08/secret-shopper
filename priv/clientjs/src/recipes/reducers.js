@@ -10,6 +10,12 @@ import {
   SET_UNFAVORITE_FAILURE
 } from './actions';
 
+const getInitialState = () => ({
+  error: null,
+  byId: {},
+  allIds: []
+});
+
 /* TODO: normalize data so we don't have to hunt for the right recipe
  * like this */
 const mapAndSetFavoriteStatus = ({
@@ -29,7 +35,7 @@ const mapAndSetFavoriteStatus = ({
   });
 };
 
-const recipes = (state = { items: [] }, action) => {
+const recipes = (state = getInitialState(), action) => {
   switch (action.type) {
     case FETCH_RECIPES_REQUEST:
       return {
@@ -37,10 +43,17 @@ const recipes = (state = { items: [] }, action) => {
         isFetching: true
       };
     case FETCH_RECIPES_SUCCESS:
+      const byId = action.recipes.reduce((acc, recipe) => {
+        acc[recipe.id] = recipe;
+        return acc;
+      }, {});
+      const allIds = action.recipes.map(rec => rec.id);
+
       return {
         ...state,
         isFetching: false,
-        items: action.recipes
+        byId,
+        allIds
       };
     case FETCH_RECIPES_FAILURE:
       return {

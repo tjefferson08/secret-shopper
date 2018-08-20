@@ -7,6 +7,7 @@ const FavoriteBadge = ({ selected, onClick }) => {
   return (
     <i
       className={`${selected ? 'fas' : 'far'} fa-star fa-2x`}
+      data-testid="favorite-badge"
       onClick={onBadgeClick}
     />
   );

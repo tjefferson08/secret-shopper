@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import RecipeCard from './RecipeCard';
 import './RecipeList.css';
 
@@ -8,9 +8,11 @@ const RecipeList = props => {
   return (
     <div className="recipe-list pure-g">
       {recipes.map(recipe =>
-        <Link className="recipe-link" to={`/recipes/${recipe.id}`}>
-          <RecipeCard recipe={recipe} key={recipe.id} />{' '}
-        </Link>
+        <div key={recipe.id}>
+          <Link className="recipe-link" to={`/recipes/${recipe.id}`}>
+            <RecipeCard recipe={recipe} />
+          </Link>
+        </div>
       )}
     </div>
   );

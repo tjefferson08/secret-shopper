@@ -8,7 +8,7 @@ import {
 } from './actions';
 
 test('should return the initial state', () => {
-  expect(recipes(undefined, {})).toEqual({ items: [] });
+  expect(recipes(undefined, {})).toEqual({ allIds: [], byId: {}, error: null });
 });
 
 test('should handle FETCH_RECIPES_SUCCESS', () => {
@@ -20,7 +20,8 @@ test('should handle FETCH_RECIPES_SUCCESS', () => {
   const expectedState = {
     other: 'state',
     isFetching: false,
-    items: [{ id: 123 }]
+    byId: { 123: { id: 123 } },
+    allIds: [123]
   };
   expect(recipes(initialState, action)).toEqual(expectedState);
 });
