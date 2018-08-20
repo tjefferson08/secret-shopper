@@ -16,25 +16,6 @@ const getInitialState = () => ({
   allIds: []
 });
 
-/* TODO: normalize data so we don't have to hunt for the right recipe
- * like this */
-const mapAndSetFavoriteStatus = ({
-  recipes,
-  targetRecipeId,
-  favoriteStatus
-}) => {
-  return recipes.map(recipe => {
-    if (recipe.id !== targetRecipeId) {
-      return recipe;
-    } else {
-      return {
-        ...recipe,
-        favorited: favoriteStatus
-      };
-    }
-  });
-};
-
 const recipes = (state = getInitialState(), action) => {
   switch (action.type) {
     case FETCH_RECIPES_REQUEST:
@@ -67,11 +48,13 @@ const recipes = (state = getInitialState(), action) => {
     case SET_FAVORITE_REQUEST:
       return {
         ...state,
-        items: mapAndSetFavoriteStatus({
-          recipes: state.items,
-          targetRecipeId: action.recipeId,
-          favoriteStatus: true
-        })
+        byId: {
+          ...state.byId,
+          [action.recipeId]: {
+            ...state.byId[action.recipeId],
+            favorited: true
+          }
+        }
       };
 
     /* I think this one is a no-op since we already updated favorite
@@ -84,33 +67,39 @@ const recipes = (state = getInitialState(), action) => {
     case SET_FAVORITE_FAILURE:
       return {
         ...state,
-        items: mapAndSetFavoriteStatus({
-          recipes: state.items,
-          targetRecipeId: action.recipeId,
-          favoriteStatus: false
-        })
+        byId: {
+          ...state.byId,
+          [action.recipeId]: {
+            ...state.byId[action.recipeId],
+            favorited: false
+          }
+        }
       };
 
     // same logic but negated for un-favoriting
     case SET_UNFAVORITE_REQUEST:
       return {
         ...state,
-        items: mapAndSetFavoriteStatus({
-          recipes: state.items,
-          targetRecipeId: action.recipeId,
-          favoriteStatus: false
-        })
+        byId: {
+          ...state.byId,
+          [action.recipeId]: {
+            ...state.byId[action.recipeId],
+            favorited: false
+          }
+        }
       };
     case SET_UNFAVORITE_SUCCESS:
       return state;
     case SET_UNFAVORITE_FAILURE:
       return {
         ...state,
-        items: mapAndSetFavoriteStatus({
-          recipes: state.items,
-          targetRecipeId: action.recipeId,
-          favoriteStatus: true
-        })
+        byId: {
+          ...state.byId,
+          [action.recipeId]: {
+            ...state.byId[action.recipeId],
+            favorited: true
+          }
+        }
       };
     default:
       return state;
