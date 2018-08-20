@@ -1,31 +1,39 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// @flow
+
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { fetchRecipes } from './recipes/actions';
 import RecipeList from './RecipeList/RecipeList';
 
-class Dashboard extends Component {
+type Props = {
+  error?: string,
+  recipes: any[],
+  onMount: Function
+};
+
+class Dashboard extends Component<Props> {
   componentDidMount() {
     this.props.onMount();
   }
   render() {
-    return <RecipeList recipes={this.props.recipes} />;
+    return (
+      <Fragment>
+        {this.props.error ? this.props.error : null}
+        <RecipeList recipes={this.props.recipes} />
+      </Fragment>
+    );
   }
 }
 
-Dashboard.propTypes = {
-  recipes: PropTypes.arrayOf(PropTypes.object),
-  onMount: PropTypes.func
-};
+const mapStateToProps = state => ({
+  error: state.recipes.error,
+  recipes: state.recipes.allIds.map(id => state.recipes.byId[id])
+});
 
-const mapStateToProps = state => ({ recipes: state.recipes.items });
 const mapDispatchToProps = dispatch => ({
   onMount: () => {
     dispatch(fetchRecipes());
   }
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Dashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
