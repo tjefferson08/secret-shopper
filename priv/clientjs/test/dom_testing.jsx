@@ -1,22 +1,27 @@
 import React from 'react';
-import { Provider } from 'react-redux';
+import { createMemoryHistory } from 'history';
 import { render, fireEvent as rtlFireEvent } from 'react-testing-library';
-import { MemoryRouter } from 'react-router';
+import { ConnectedRouter } from 'connected-react-router';
+import { Provider } from 'react-redux';
 import { createStore } from '../src/store';
 
-export const renderWithRedux = (ui, { initialState, store } = {}) => {
-  store = store || createStore(initialState);
+export const renderWithRedux = (ui, { initialState, route = '/' } = {}) => {
+  const { history, store } = createStore(
+    initialState,
+    createMemoryHistory({ initialEntries: [route] })
+  );
 
   return {
     // "splat" return-value object into this obj. literal
     ...render(
-      <MemoryRouter>
-        <Provider store={store}>
+      <Provider store={store}>
+        <ConnectedRouter history={history}>
           {ui}
-        </Provider>
-      </MemoryRouter>
+        </ConnectedRouter>
+      </Provider>
     ),
-    store
+    store,
+    history
   };
 };
 

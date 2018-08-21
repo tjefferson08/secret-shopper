@@ -15,7 +15,7 @@ const Router = () =>
     <Route path="/sign_up" render={props => <SignUp {...props} />} />
     <Route path="/sign_in" render={props => <SignIn {...props} />} />
     <Route path="/sign_out" component={SignOut} />
-    <Route path="/recipes/:id" component={RecipeShow} />
+    <PrivateRoute path="/recipes/:id" component={RecipeShow} />
     <PrivateRoute path="/dashboard" component={Dashboard} />
     <Route component={NoMatch} />
   </Switch>;

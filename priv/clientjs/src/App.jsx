@@ -3,11 +3,13 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import NavBar from './NavBar/NavBar';
 import Router from './Router';
-import { history, createStore } from './store';
+import { createStore } from './store';
 import './App.css';
 
+const { store, history } = createStore();
+
 const App = () =>
-  <Provider store={createStore()}>
+  <Provider store={store}>
     <ConnectedRouter history={history}>
       <div>
         <NavBar />
