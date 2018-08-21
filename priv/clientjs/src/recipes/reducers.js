@@ -1,4 +1,9 @@
+// @flow
+
 import {
+  FETCH_RECIPE_REQUEST,
+  FETCH_RECIPE_SUCCESS,
+  FETCH_RECIPE_FAILURE,
   FETCH_RECIPES_REQUEST,
   FETCH_RECIPES_SUCCESS,
   FETCH_RECIPES_FAILURE,
@@ -10,14 +15,39 @@ import {
   SET_UNFAVORITE_FAILURE
 } from './actions';
 
-const getInitialState = () => ({
+type Action = any;
+type State = any;
+
+const getInitialState = (): State => ({
   error: null,
   byId: {},
+  activeId: null,
   allIds: []
 });
 
-const recipes = (state = getInitialState(), action) => {
+const recipes = (state: State = getInitialState(), action: Action) => {
   switch (action.type) {
+    case FETCH_RECIPE_REQUEST:
+      return {
+        ...state,
+        isFetching: true
+      };
+    case FETCH_RECIPE_SUCCESS:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.recipe.id]: action.recipe
+        },
+        activeId: action.recipe.id,
+        isFetching: false
+      };
+    case FETCH_RECIPE_FAILURE:
+      return {
+        ...state,
+        activeId: null,
+        isFetching: false
+      };
     case FETCH_RECIPES_REQUEST:
       return {
         ...state,
