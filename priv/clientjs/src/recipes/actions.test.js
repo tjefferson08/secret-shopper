@@ -1,4 +1,7 @@
 import {
+  FETCH_RECIPE_REQUEST,
+  FETCH_RECIPE_SUCCESS,
+  FETCH_RECIPE_FAILURE,
   FETCH_RECIPES_REQUEST,
   FETCH_RECIPES_SUCCESS,
   FETCH_RECIPES_FAILURE,
@@ -8,6 +11,7 @@ import {
   SET_UNFAVORITE_REQUEST,
   SET_UNFAVORITE_SUCCESS,
   SET_UNFAVORITE_FAILURE,
+  fetchRecipe,
   fetchRecipes,
   setFavoriteStatus
 } from './actions';
@@ -19,7 +23,55 @@ import thunk from 'redux-thunk';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe('fetching recipes', () => {
+describe('fetching (single) recipe', () => {
+  describe('successful request', () => {
+    beforeEach(() => {
+      nock()
+        .get('/api/recipes/123')
+        .reply(200, {
+          recipe: { id: '123', name: 'Mac n Cheese' }
+        });
+    });
+
+    afterEach(() => {
+      expect(isDone()).toBe(true);
+    });
+
+    test('creates FETCH_RECIPE_REQUEST and FETCH_RECIPE_SUCCESS', () => {
+      const expectedActions = [
+        { type: FETCH_RECIPE_REQUEST },
+        {
+          type: FETCH_RECIPE_SUCCESS,
+          recipe: { id: '123', name: 'Mac n Cheese' }
+        }
+      ];
+      const store = mockStore({});
+      return store.dispatch(fetchRecipe(123)).then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    });
+  });
+
+  describe('fetch failure', () => {
+    test('creates FETCH_RECIPE_REQUEST, then FETCH_RECIPE_FAILURE', () => {
+      nock()
+        .get('/api/recipes/123')
+        .reply(500, {});
+
+      const expectedActions = [
+        { type: FETCH_RECIPE_REQUEST },
+        { type: FETCH_RECIPE_FAILURE, error: expect.any(Error) }
+      ];
+      const store = mockStore({});
+
+      return store.dispatch(fetchRecipe(123)).then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    });
+  });
+});
+
+describe('fetching (multiple) recipes', () => {
   describe('successful request', () => {
     beforeEach(() => {
       nock()

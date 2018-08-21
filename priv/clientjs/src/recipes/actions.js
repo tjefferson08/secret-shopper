@@ -1,4 +1,11 @@
+// @flow
+
+import type Dispatch from 'redux';
 import http from '../http';
+
+export const FETCH_RECIPE_REQUEST = 'FETCH_RECIPE_REQUEST';
+export const FETCH_RECIPE_SUCCESS = 'FETCH_RECIPE_SUCCESS';
+export const FETCH_RECIPE_FAILURE = 'FETCH_RECIPE_FAILURE';
 
 export const FETCH_RECIPES_REQUEST = 'FETCH_RECIPES_REQUEST';
 export const FETCH_RECIPES_SUCCESS = 'FETCH_RECIPES_SUCCESS';
@@ -12,6 +19,16 @@ export const SET_UNFAVORITE_REQUEST = 'SET_UNFAVORITE_REQUEST';
 export const SET_UNFAVORITE_SUCCESS = 'SET_UNFAVORITE_SUCCESS';
 export const SET_UNFAVORITE_FAILURE = 'SET_UNFAVORITE_FAILURE';
 
+const fetchRecipeRequest = () => ({ type: FETCH_RECIPE_REQUEST });
+const fetchRecipeSuccess = recipe => ({
+  type: FETCH_RECIPE_SUCCESS,
+  recipe
+});
+const fetchRecipeFailure = err => ({
+  type: FETCH_RECIPE_FAILURE,
+  error: err
+});
+
 const fetchRecipesRequest = () => ({ type: FETCH_RECIPES_REQUEST });
 const fetchRecipesSuccess = recipes => ({
   type: FETCH_RECIPES_SUCCESS,
@@ -22,7 +39,19 @@ const fetchRecipesFailure = err => ({
   error: err
 });
 
-export const fetchRecipes = () => {
+export const fetchRecipe = (recipeId: number): Dispatch => {
+  return dispatch => {
+    dispatch(fetchRecipeRequest());
+    return http
+      .get(`/api/recipes/${recipeId}`)
+      .then(
+        response => dispatch(fetchRecipeSuccess(response.data.recipe)),
+        err => dispatch(fetchRecipeFailure(err))
+      );
+  };
+};
+
+export const fetchRecipes = (): Dispatch => {
   return dispatch => {
     dispatch(fetchRecipesRequest());
     return http
@@ -62,7 +91,10 @@ const setUnfavoriteFailure = (recipeId, err) => ({
   type: SET_UNFAVORITE_FAILURE
 });
 
-export const setFavoriteStatus = (recipeId, favoriteStatus) => {
+export const setFavoriteStatus = (
+  recipeId: number,
+  favoriteStatus: boolean
+): Dispatch => {
   return dispatch => {
     return Promise.resolve().then(() => {
       if (favoriteStatus) {
