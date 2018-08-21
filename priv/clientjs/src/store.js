@@ -13,11 +13,14 @@ const composeEnhancers =
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
     : compose;
 
-export const history = createBrowserHistory();
-
-export const createStore = (initialState = {}) =>
-  reduxCreateStore(
+export const createStore = (
+  initialState = {},
+  history = createBrowserHistory()
+) => {
+  const store = reduxCreateStore(
     connectRouter(history)(rootReducer),
     initialState,
     composeEnhancers(applyMiddleware(routerMiddleware(history), thunk))
   );
+  return { store, history };
+};

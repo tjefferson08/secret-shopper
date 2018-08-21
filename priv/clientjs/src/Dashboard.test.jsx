@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, waitForElement } from 'react-testing-library';
+import { cleanup, wait, waitForElement } from 'react-testing-library';
 import Dashboard from './Dashboard';
 import { fireClick, renderWithRedux } from '../test/dom_testing';
 import nock from '../test/nock';
