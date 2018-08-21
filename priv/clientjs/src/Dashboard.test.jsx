@@ -1,9 +1,8 @@
-import configureMockStore from 'redux-mock-store';
 import React from 'react';
 import { cleanup, waitForElement } from 'react-testing-library';
 import Dashboard from './Dashboard';
 import { fireClick, renderWithRedux } from '../test/dom_testing';
-import nock, { isDone } from '../test/nock';
+import nock from '../test/nock';
 
 afterEach(cleanup);
 
@@ -108,7 +107,7 @@ test('clicking the favorite badge should toggle favorite', async () => {
   expect(favoriteBadge.classList).toContain('far');
   expect(favoriteBadge.classList).not.toContain('fas');
 
-  expect(indexRequest.isDone()).toBe(true);
-  expect(favoriteRequest.isDone()).toBe(true);
-  expect(unfavoriteRequest.isDone()).toBe(true);
+  await wait(() => expect(indexRequest.isDone()).toBe(true));
+  await wait(() => expect(favoriteRequest.isDone()).toBe(true));
+  await wait(() => expect(unfavoriteRequest.isDone()).toBe(true));
 });
