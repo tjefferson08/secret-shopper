@@ -30,8 +30,7 @@ exports[`it should render all recipe fields when showDetails is true 1`] = `
       <strong
         class="time-label"
       >
-        Cook time
-        :
+        Cook time:
       </strong>
       <p
         class="time-value"
@@ -45,8 +44,7 @@ exports[`it should render all recipe fields when showDetails is true 1`] = `
       <strong
         class="time-label"
       >
-        Prep time
-        :
+        Prep time:
       </strong>
       <p
         class="time-value"
@@ -60,8 +58,7 @@ exports[`it should render all recipe fields when showDetails is true 1`] = `
       <strong
         class="time-label"
       >
-        Total time
-        :
+        Total time:
       </strong>
       <p
         class="time-value"
@@ -125,8 +122,7 @@ exports[`it should render the main recipe fields 1`] = `
       <strong
         class="time-label"
       >
-        Cook time
-        :
+        Cook time:
       </strong>
       <p
         class="time-value"
@@ -140,8 +136,7 @@ exports[`it should render the main recipe fields 1`] = `
       <strong
         class="time-label"
       >
-        Prep time
-        :
+        Prep time:
       </strong>
       <p
         class="time-value"
@@ -155,8 +150,7 @@ exports[`it should render the main recipe fields 1`] = `
       <strong
         class="time-label"
       >
-        Total time
-        :
+        Total time:
       </strong>
       <p
         class="time-value"
