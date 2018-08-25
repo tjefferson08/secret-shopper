@@ -27,5 +27,9 @@ npm-debug.log
 /config/*.secret.exs
 
 /priv/clientjs/node_modules
+/priv/clientjs/lib
 /priv/clientjs/build
 /.projectile
+/priv/clientjs/.merlin
+/priv/clientjs/.bsb.lock
+*.bs.js
