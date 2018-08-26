@@ -11,7 +11,8 @@ exports[`it should render all recipe fields when showDetails is true 1`] = `
       class="header"
     >
       <i
-        class="far fa-star fa-2x"
+        class="fa-star fa-2x far"
+        style="cursor: pointer; display: inline-block; padding-right: 12px;"
         data-testid="favorite-badge"
       />
       <h3
@@ -103,7 +104,8 @@ exports[`it should render the main recipe fields 1`] = `
       class="header"
     >
       <i
-        class="far fa-star fa-2x"
+        class="fa-star fa-2x far"
+        style="cursor: pointer; display: inline-block; padding-right: 12px;"
         data-testid="favorite-badge"
       />
       <h3
