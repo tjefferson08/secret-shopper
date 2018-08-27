@@ -2,12 +2,13 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import FavoriteBadgeBs from './FavoriteBadge.bs';
-import IngredientsList from './IngredientsList';
+import IngredientsListBs from './IngredientsList.bs';
 import InstructionsList from './InstructionsList';
 import TimeBs from './Time.bs';
 import { setFavoriteStatus } from '../recipes/actions';
 
 const FavoriteBadge = FavoriteBadgeBs.jsComponent;
+const IngredientsList = IngredientsListBs.jsComponent;
 const Time = TimeBs.jsComponent;
 
 const RecipeCard = ({ recipe, setFavorite, showDetails }) => {
