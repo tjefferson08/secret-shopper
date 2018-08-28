@@ -1,9 +1,13 @@
 // @flow
 
+import { Link } from 'react-router-dom';
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { fetchRecipes } from './recipes/actions';
-import RecipeList from './RecipeList/RecipeList';
+import RecipeCardBs from './RecipeList/RecipeCard.bs';
+import './RecipeList/RecipeList.css';
+
+const RecipeCard = RecipeCardBs.jsComponent;
 
 type Props = {
   error?: string,
@@ -18,8 +22,19 @@ class Dashboard extends Component<Props> {
   render() {
     return (
       <Fragment>
-        {this.props.error ? this.props.error : null}
-        <RecipeList recipes={this.props.recipes} />
+        {this.props.error ? (
+          this.props.error
+        ) : (
+          <div className="recipe-list pure-g">
+            {this.props.recipes.map(recipe => (
+              <div key={recipe.id}>
+                <Link className="recipe-link" to={`/recipes/${recipe.id}`}>
+                  <RecipeCard recipe={recipe} />
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
       </Fragment>
     );
   }
@@ -36,4 +51,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Dashboard);
