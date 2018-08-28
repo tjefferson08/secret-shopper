@@ -1,7 +1,9 @@
 import React from 'react';
-import RecipeCard from './RecipeCard';
+import RecipeCardBs from './RecipeCard.bs';
 import configureMockStore from 'redux-mock-store';
 import { render, cleanup } from 'react-testing-library';
+
+const RecipeCard = RecipeCardBs.jsComponent;
 
 let store;
 
