@@ -1,4 +1,3 @@
-[@bs.deriving abstract]
 type recipe = {
   id: int,
   name: string,
@@ -14,15 +13,18 @@ type recipe = {
 let component = ReasonReact.statelessComponent("RecipeCard");
 
 let make = (~recipe, ~showDetails, _children) => {
-  let id = idGet(recipe);
-  let cook_time = cook_timeGet(recipe);
-  let favorited = favoritedGet(recipe);
-  let image_url = image_urlGet(recipe);
-  let ingredients = ingredientsGet(recipe);
-  let instructions = instructionsGet(recipe);
-  let name = nameGet(recipe);
-  let prep_time = prep_timeGet(recipe);
-  let total_time = total_timeGet(recipe);
+  let {
+    id,
+    cook_time,
+    favorited,
+    image_url,
+    ingredients,
+    instructions,
+    name,
+    prep_time,
+    total_time,
+  } = recipe;
+
   let setFavorite = event => Js.log("TODO: implement setFavorite");
 
   {
@@ -51,18 +53,16 @@ let make = (~recipe, ~showDetails, _children) => {
   };
 };
 
-/* bunch of rigamarole if you want to use this in a js file */
-[@bs.deriving abstract]
-type jsProps = {
-  recipe,
-  showDetails: bool,
-};
+/* type jsProps = { */
+/*   recipe, */
+/*   showDetails: bool, */
+/* }; */
 
-let jsComponent =
-  ReasonReact.wrapReasonForJs(~component, jsProps =>
-    make(
-      ~recipe=jsProps->recipeGet,
-      ~showDetails=jsProps->showDetailsGet,
-      [||],
-    )
-  );
+/* let jsComponent = */
+/*   ReasonReact.wrapReasonForJs(~component, jsProps => */
+/*     make( */
+/*       ~recipe=jsProps->recipeGet, */
+/*       ~showDetails=jsProps->showDetailsGet, */
+/*       [||], */
+/*     ) */
+/*   ); */
