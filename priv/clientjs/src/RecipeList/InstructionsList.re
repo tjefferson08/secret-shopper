@@ -1,36 +1,36 @@
-let component = ReasonReact.statelessComponent("IngredientsList");
+let component = ReasonReact.statelessComponent("InstructionsList");
 
 [@bs.deriving abstract]
-type ingredient = {
+type instruction = {
   id: int,
-  name: string,
+  text: string,
 };
 
 [@bs.deriving abstract]
-type jsProps = {ingredients: array(ingredient)};
+type jsProps = {instructions: array(instruction)};
 
-let make = (~ingredients, _children) => {
+let make = (~instructions, _children) => {
   ...component,
   render: _self =>
     <>
-      <h4> {ReasonReact.string("Ingredients")} </h4>
-      <ul>
+      <h4> {ReasonReact.string("Instructions")} </h4>
+      <ol>
         {
           Array.map(
             ing =>
               <li key={string_of_int(idGet(ing))}>
-                {ReasonReact.string(nameGet(ing))}
+                {ReasonReact.string(textGet(ing))}
               </li>,
-            ingredients,
+            instructions,
           )
           |> ReasonReact.array
         }
-      </ul>
+      </ol>
     </>,
 };
 
 /* bunch of rigamarole if you want to use this in a js file */
 let jsComponent =
   ReasonReact.wrapReasonForJs(~component, jsProps =>
-    make(~ingredients=jsProps |> ingredientsGet, [||])
+    make(~instructions=jsProps |> instructionsGet, [||])
   );

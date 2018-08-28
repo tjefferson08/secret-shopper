@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import FavoriteBadgeBs from './FavoriteBadge.bs';
 import IngredientsListBs from './IngredientsList.bs';
-import InstructionsList from './InstructionsList';
+import InstructionsListBs from './InstructionsList.bs';
 import TimeBs from './Time.bs';
 import { setFavoriteStatus } from '../recipes/actions';
 
 const FavoriteBadge = FavoriteBadgeBs.jsComponent;
 const IngredientsList = IngredientsListBs.jsComponent;
+const InstructionsList = InstructionsListBs.jsComponent;
 const Time = TimeBs.jsComponent;
 
 const RecipeCard = ({ recipe, setFavorite, showDetails }) => {
@@ -35,19 +36,18 @@ const RecipeCard = ({ recipe, setFavorite, showDetails }) => {
             selected={favorited}
             onClick={setRecipeFavoriteStatus}
           />
-          <h3 className="name">
-            {name}
-          </h3>
+          <h3 className="name">{name}</h3>
         </div>
         <img className="thumbnail" alt={name} src={image_url} />
         <Time label="Cook time" value={cook_time} />
         <Time label="Prep time" value={prep_time} />
         <Time label="Total time" value={total_time} />
-        {showDetails &&
+        {showDetails && (
           <Fragment>
             <IngredientsList ingredients={ingredients} />
             <InstructionsList instructions={instructions} />
-          </Fragment>}
+          </Fragment>
+        )}
       </div>
     </div>
   );
@@ -93,4 +93,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(null, mapDispatchToProps)(RecipeCard);
+export default connect(
+  null,
+  mapDispatchToProps
+)(RecipeCard);
