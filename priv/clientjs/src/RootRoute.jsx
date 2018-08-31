@@ -1,7 +1,9 @@
 import React from 'react';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
-import Dashboard from './Dashboard';
+import DashboardBs from './Dashboard.bs';
+
+const Dashboard = DashboardBs.jsComponent;
 
 const RootRoute = ({ isAuthenticated, location, ...rest }) => {
   if (isAuthenticated) {
