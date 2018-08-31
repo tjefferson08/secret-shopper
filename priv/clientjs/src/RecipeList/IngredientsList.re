@@ -1,13 +1,9 @@
 let component = ReasonReact.statelessComponent("IngredientsList");
 
-[@bs.deriving abstract]
 type ingredient = {
   id: int,
   name: string,
 };
-
-[@bs.deriving abstract]
-type jsProps = {ingredients: array(ingredient)};
 
 let make = (~ingredients, _children) => {
   ...component,
@@ -18,8 +14,8 @@ let make = (~ingredients, _children) => {
         {
           Array.map(
             ing =>
-              <li key={string_of_int(idGet(ing))}>
-                {ReasonReact.string(nameGet(ing))}
+              <li key={string_of_int(ing.id)}>
+                {ReasonReact.string(ing.name)}
               </li>,
             ingredients,
           )
@@ -28,9 +24,3 @@ let make = (~ingredients, _children) => {
       </ul>
     </>,
 };
-
-/* bunch of rigamarole if you want to use this in a js file */
-let jsComponent =
-  ReasonReact.wrapReasonForJs(~component, jsProps =>
-    make(~ingredients=jsProps |> ingredientsGet, [||])
-  );
