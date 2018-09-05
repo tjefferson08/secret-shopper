@@ -1,11 +1,6 @@
 let component = ReasonReact.statelessComponent("InstructionsList");
 
-type instruction = {
-  id: string,
-  text: string,
-};
-
-let make = (~instructions, _children) => {
+let make = (~instructions: array(SecretShopper.Instruction.t), _children) => {
   ...component,
   render: _self =>
     <>
@@ -13,10 +8,8 @@ let make = (~instructions, _children) => {
       <ol>
         {
           Array.map(
-            ing =>
-              <li key={ing.id}>
-                {ReasonReact.string(ing.text)}
-              </li>,
+            (inst: SecretShopper.Instruction.t) =>
+              <li key={inst.id}> {ReasonReact.string(inst.text)} </li>,
             instructions,
           )
           |> ReasonReact.array

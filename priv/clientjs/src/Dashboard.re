@@ -1,5 +1,3 @@
-open RecipeCard;
-
 /*
   get a cookie's contents as a string
  */
@@ -9,12 +7,12 @@ external getAsString: string => option(string) = "get";
 type action =
   | FetchRecipes
   | FetchFailure
-  | LoadRecipes(array(recipe));
+  | LoadRecipes(array(Recipe.t));
 
 type state =
   | Error(string)
   | Loading
-  | Loaded(array(recipe));
+  | Loaded(array(Recipe.t));
 
 let component = ReasonReact.reducerComponent("Dashboard");
 

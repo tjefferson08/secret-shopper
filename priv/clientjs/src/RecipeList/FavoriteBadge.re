@@ -12,7 +12,7 @@ let badgeStyle =
 let make = (~selected, ~onClick, _children) => {
   let onBadgeClick = event => {
     ReactEvent.Mouse.preventDefault(event);
-    onClick(!selected);
+    onClick(!selected) |> ignore
   };
   {
     ...component,

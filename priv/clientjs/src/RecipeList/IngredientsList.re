@@ -1,11 +1,6 @@
 let component = ReasonReact.statelessComponent("IngredientsList");
 
-type ingredient = {
-  id: int,
-  name: string,
-};
-
-let make = (~ingredients, _children) => {
+let make = (~ingredients: array(SecretShopper.Ingredient.t), _children) => {
   ...component,
   render: _self =>
     <>
@@ -13,7 +8,7 @@ let make = (~ingredients, _children) => {
       <ul>
         {
           Array.map(
-            ing =>
+            (ing: Ingredient.t) =>
               <li key={string_of_int(ing.id)}>
                 {ReasonReact.string(ing.name)}
               </li>,

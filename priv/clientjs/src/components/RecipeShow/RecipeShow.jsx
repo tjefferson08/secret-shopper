@@ -2,8 +2,10 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import RecipeCard from '../../RecipeList/RecipeCard';
+import RecipeCardBs from '../../RecipeList/RecipeCard.bs';
 import { fetchRecipe } from '../../recipes/actions';
+
+const RecipeCard = RecipeCardBs.jsComponent;
 
 type Recipe = any;
 type Props = {

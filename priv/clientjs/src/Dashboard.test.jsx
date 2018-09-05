@@ -1,8 +1,10 @@
 import React from 'react';
 import { cleanup, wait, waitForElement } from 'react-testing-library';
-import Dashboard from './Dashboard';
+import DashboardBs from './Dashboard.bs';
 import { fireClick, renderWithRedux } from '../test/dom_testing';
 import nock from '../test/nock';
+
+const Dashboard = DashboardBs.jsComponent;
 
 afterEach(cleanup);
 
@@ -13,6 +15,7 @@ test('it should render a list of recipes', async () => {
         id: 1,
         favorited: false,
         name: 'Beans and rice',
+        image_url: 'http://beans.com/image.jpg',
         cook_time: '5 minutes',
         prep_time: '10 minutes',
         total_time: '20 minutes',
@@ -29,6 +32,7 @@ test('it should render a list of recipes', async () => {
         id: 2,
         favorited: true,
         name: 'Mac and Cheese',
+        image_url: 'http://macncheese.com/image.jpg',
         cook_time: '15 minutes',
         prep_time: '1 minute',
         total_time: '16 minutes',
@@ -65,6 +69,7 @@ test('clicking the favorite badge should toggle favorite', async () => {
       {
         id: 1,
         favorited: false,
+        image_url: 'http://macncheese.com/image.jpg',
         name: 'Beans and rice',
         cook_time: '5 minutes',
         prep_time: '10 minutes',
