@@ -1,36 +1,10 @@
 open RecipeCard;
-open IngredientsList;
-open InstructionsList;
 
-module Decode = {
-  let ingredient = json =>
-    Json.Decode.{
-      id: json |> field("id", int),
-      name: json |> field("name", string),
-    };
-
-  let instruction = json =>
-    Json.Decode.{
-      id: json |> field("id", int),
-      text: json |> field("text", string),
-    };
-
-  let recipe = json =>
-    Json.Decode.{
-      id: json |> field("id", int),
-      name: json |> field("name", string),
-      cook_time: json |> field("cook_time", string),
-      prep_time: json |> field("prep_time", string),
-      total_time: json |> field("total_time", string),
-      favorited: json |> field("favorited", bool),
-      image_url: json |> field("image_url", string),
-      ingredients: json |> field("ingredients", array(ingredient)),
-      instructions: json |> field("instructions", array(instruction)),
-    };
-
-  let recipes = json =>
-    Json.Decode.(json |> field("recipes", array(recipe)));
-};
+/*
+  get a cookie's contents as a string
+ */
+[@bs.module "js-cookie"]
+external getAsString: string => option(string) = "get";
 
 type action =
   | FetchRecipes
@@ -55,27 +29,21 @@ let make = _children => {
         Loading,
         (
           self => {
-            Js.log("requesting recipes!");
             Js.Promise.(
-            // TODO AUTH
-              Fetch.fetch("/api/recipes")
-              |> then_(Fetch.Response.json)
-              |> then_(json =>
-                   json
-                   |> Decode.recipes
-                   |> (recipes => self.send(LoadRecipes(recipes)))
-                   |> resolve
+              Api.getRecipes()
+              |> then_(recipes =>
+                   Js.Promise.resolve(self.send(LoadRecipes(recipes)))
                  )
-              |> catch(_err =>
-                   Js.Promise.resolve(self.send(FetchFailure))
-                 )
-              |> ignore
+              |> catch(_err => {
+                   Js.log(_err);
+                   Js.Promise.resolve(self.send(FetchFailure));
+                 })
             );
+            ();
           }
         ),
       )
     | LoadRecipes(recipes) =>
-      Js.log("hello");
       ReasonReact.Update(Loaded(recipes));
     },
   render: self =>

@@ -1,7 +1,7 @@
 let component = ReasonReact.statelessComponent("InstructionsList");
 
 type instruction = {
-  id: int,
+  id: string,
   text: string,
 };
 
@@ -14,7 +14,7 @@ let make = (~instructions, _children) => {
         {
           Array.map(
             ing =>
-              <li key={string_of_int(ing.id)}>
+              <li key={ing.id}>
                 {ReasonReact.string(ing.text)}
               </li>,
             instructions,

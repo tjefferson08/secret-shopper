@@ -30,7 +30,7 @@ let make = (~recipe, ~showDetails, _children) => {
   {
     ...component,
     render: _self =>
-      <div className="pure-u-1 pure-u-md-1-3">
+      <div key={string_of_int(id)} className="pure-u-1 pure-u-md-1-3">
         <div className="recipe-card">
           <div className="header">
             <FavoriteBadge selected=favorited onClick=setFavorite />
