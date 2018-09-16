@@ -40,23 +40,3 @@ let make = (~recipe: Recipe.t, ~showDetails, ~setFavorite, _children) => {
       </div>,
   };
 };
-
-[@bs.deriving abstract]
-type props = {
-  recipe: Recipe.abs_t,
-  showDetails: bool,
-  setFavorite: bool => unit,
-};
-
-let jsComponent =
-  ReasonReact.wrapReasonForJs(
-    ~component,
-    jsProps => {
-      make(
-        ~recipe=Recipe.tFromJs(jsProps->recipeGet),
-        ~showDetails=jsProps->showDetailsGet,
-        ~setFavorite=jsProps->setFavoriteGet,
-        [||],
-      );
-    },
-  );

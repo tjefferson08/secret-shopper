@@ -1,25 +1,24 @@
 type action =
-  | FetchRecipes
+  | FetchRecipe
   | FetchFailure
   | CreateFavorite(int)
   | DeleteFavorite(int)
   | UpdateRecipe(int, Recipe.t)
-  | LoadRecipes(array(Recipe.t));
+  | LoadRecipe(Recipe.t);
 
 type state =
   | Error(string)
   | Loading
-  | Loaded(array(Recipe.t));
+  | Loaded(Recipe.t);
 
-let component = ReasonReact.reducerComponent("Dashboard");
+let component = ReasonReact.reducerComponent("RecipeShow");
 
-let requestRecipes = self =>
+let requestRecipe = (recipeId, self) =>
   Js.Promise.(
-    Api.getRecipes()
-    |> then_(recipes => {
-         Js.log("Hi");
-         Js.Promise.resolve(self.ReasonReact.send(LoadRecipes(recipes)));
-       })
+    Api.getRecipe(recipeId)
+    |> then_(recipe =>
+         Js.Promise.resolve(self.ReasonReact.send(LoadRecipe(recipe)))
+       )
     |> catch(_err => {
          Js.log(_err);
          Js.Promise.resolve(self.ReasonReact.send(FetchFailure));
@@ -64,54 +63,38 @@ let deleteFavorite = (recipeId, recipe, self) =>
 let make = _children => {
   ...component,
   initialState: () => Loading,
-  didMount: self => self.send(FetchRecipes),
+  didMount: self => self.send(FetchRecipe),
   reducer: (action, state) =>
     switch (action) {
     | FetchFailure => ReasonReact.Update(Error("poop"))
-    | FetchRecipes =>
-      ReasonReact.UpdateWithSideEffects(Loading, requestRecipes)
+    // Hardcoded to 2 until we get routing
+    | FetchRecipe => ReasonReact.UpdateWithSideEffects(Loading, requestRecipe(2))
     | CreateFavorite(recipeId) =>
       switch (state) {
-      | Loaded(recipes) =>
+      | Loaded(recipe) =>
         ReasonReact.UpdateWithSideEffects(
           state,
-          createFavorite(
-            recipeId,
-            Recipe.(
-              recipes |> Array.to_list |> List.find(r => r.id == recipeId)
-            ),
-          ),
+          createFavorite(recipeId, recipe),
         )
       | _ => ReasonReact.NoUpdate
       }
     | DeleteFavorite(recipeId) =>
       switch (state) {
-      | Loaded(recipes) =>
+      | Loaded(recipe) =>
         ReasonReact.UpdateWithSideEffects(
           state,
-          deleteFavorite(
-            recipeId,
-            Recipe.(
-              recipes |> Array.to_list |> List.find(r => r.id == recipeId)
-            ),
-          ),
+          deleteFavorite(recipeId, recipe),
         )
       | _ => ReasonReact.NoUpdate
       }
-    | LoadRecipes(recipes) => ReasonReact.Update(Loaded(recipes))
-    | UpdateRecipe(recipeId, recipe) =>
+    | LoadRecipe(recipe) => ReasonReact.Update(Loaded(recipe))
+    | UpdateRecipe(recipeId, newRecipe) =>
       Js.log("here 0");
       switch (state) {
-      | Loaded(recipes) =>
+      | Loaded(recipe) =>
         Js.log("here 1");
-        let newRecipes =
-          recipes
-          |> Array.to_list
-          |> List.filter(Recipe.(r => r.id != recipeId))
-          |> Array.of_list
-          |> Array.append([|recipe|]);
-        Js.log(newRecipes);
-        ReasonReact.Update(Loaded(newRecipes));
+        Js.log(newRecipe);
+        ReasonReact.Update(Loaded(newRecipe));
       | _ => ReasonReact.NoUpdate
       };
     },
@@ -119,31 +102,24 @@ let make = _children => {
     switch (self.state) {
     | Error(msg) => <div> {ReasonReact.string("Error: " ++ msg)} </div>
     | Loading => <div> {ReasonReact.string("Loading...")} </div>
-    | Loaded(recipes) =>
-      <div className="recipe-list pure-g">
-        {
-          Array.map(
-            recipe => {
-              let setFavorite =
-                Recipe.(
-                  selected =>
-                    selected ?
-                      self.send(CreateFavorite(recipe.id)) :
-                      self.send(DeleteFavorite(recipe.id))
-              );
-
-              <RecipeCard
-                key={string_of_int(recipe.id)}
-                recipe
-                showDetails=false
-                setFavorite
-              />;
-            },
-            recipes,
+    | Loaded(recipe) =>
+      let setFavorite =
+        Recipe.(
+          (
+            selected =>
+              selected ?
+                self.send(CreateFavorite(recipe.id)) :
+                self.send(DeleteFavorite(recipe.id))
           )
-          |> ReasonReact.array
-        }
-      </div>
+        );
+      Recipe.(
+        <RecipeCard
+          key={string_of_int(recipe.id)}
+          recipe
+          showDetails=false
+          setFavorite
+        />
+      );
     },
 };
 

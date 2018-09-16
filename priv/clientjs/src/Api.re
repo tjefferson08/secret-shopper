@@ -39,7 +39,10 @@ module Decode = {
         }
     );
 
-  let recipes = json =>
+  let recipesShow = json =>
+    Json.Decode.(json |> field("recipe", recipe));
+
+  let recipesIndex = json =>
     Json.Decode.(json |> field("recipes", array(recipe)));
 };
 
@@ -81,7 +84,14 @@ let getRecipes = () =>
   Js.Promise.(
     Fetch.fetchWithInit("/api/recipes", getRequestConfig())
     |> then_(Fetch.Response.json)
-    |> then_(json => json |> Decode.recipes |> resolve)
+    |> then_(json => json |> Decode.recipesIndex |> resolve)
+  );
+
+let getRecipe = (recipeId) =>
+  Js.Promise.(
+    Fetch.fetchWithInit("/api/recipes/" ++ string_of_int(recipeId), getRequestConfig())
+    |> then_(Fetch.Response.json)
+    |> then_(json => json |> Decode.recipesShow |> resolve)
   );
 
 let createFavorite = recipeId => {
