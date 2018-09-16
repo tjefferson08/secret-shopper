@@ -25,7 +25,7 @@ export const renderWithRedux = (ui, { initialState, route = '/' } = {}) => {
   };
 };
 
-export const flush = () => new Promise((resolve, _) => setTimeout(resolve, 0));
+export const flush = () => new Promise((resolve, _) => setTimeout(resolve, 10));
 
 export const fireEvent = (...args) => {
   const originalVal = rtlFireEvent(...args);

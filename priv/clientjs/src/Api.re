@@ -87,9 +87,7 @@ let getRecipes = () =>
 let createFavorite = recipeId => {
   let payload = Js.Dict.empty();
   Js.Dict.set(payload, "recipe_id", Js.Json.number(float_of_int(recipeId)));
-  Js.Promise.(
-    Fetch.fetchWithInit("/api/favorites", postRequestConfig(payload))
-  );
+  Fetch.fetchWithInit("/api/favorites", postRequestConfig(payload))
 };
 
 let deleteFavorite = recipeId =>

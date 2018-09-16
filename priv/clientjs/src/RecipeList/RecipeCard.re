@@ -1,12 +1,8 @@
 open Recipe;
 
-type state = {
-  favorited: boolean
-}
+let component = ReasonReact.statelessComponent("RecipeCard");
 
-let component = ReasonReact.reducerComponent("RecipeCard");
-
-let make = (~recipe: Recipe.t, ~showDetails, _children) => {
+let make = (~recipe: Recipe.t, ~showDetails, ~setFavorite, _children) => {
   let {
     id,
     cook_time,
@@ -18,8 +14,6 @@ let make = (~recipe: Recipe.t, ~showDetails, _children) => {
     prep_time,
     total_time,
   } = recipe;
-
-  let setFavorite = selected => Api.setFavoriteStatus(id, selected);
 
   {
     ...component,
@@ -48,16 +42,21 @@ let make = (~recipe: Recipe.t, ~showDetails, _children) => {
 };
 
 [@bs.deriving abstract]
-type jsProps = {
-  recipe: Recipe.t,
+type props = {
+  recipe: Recipe.abs_t,
   showDetails: bool,
+  setFavorite: bool => unit,
 };
 
 let jsComponent =
-  ReasonReact.wrapReasonForJs(~component, jsProps =>
-    make(
-      ~recipe=jsProps->recipeGet,
-      ~showDetails=jsProps->showDetailsGet,
-      [||],
-    )
+  ReasonReact.wrapReasonForJs(
+    ~component,
+    jsProps => {
+      make(
+        ~recipe=Recipe.tFromJs(jsProps->recipeGet),
+        ~showDetails=jsProps->showDetailsGet,
+        ~setFavorite=jsProps->setFavoriteGet,
+        [||],
+      );
+    },
   );
