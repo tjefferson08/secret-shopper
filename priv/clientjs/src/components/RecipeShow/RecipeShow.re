@@ -67,8 +67,7 @@ let make = _children => {
   reducer: (action, state) =>
     switch (action) {
     | FetchFailure => ReasonReact.Update(Error("poop"))
-    // Hardcoded to 2 until we get routing
-    | FetchRecipe => ReasonReact.UpdateWithSideEffects(Loading, requestRecipe(2))
+    | FetchRecipe => ReasonReact.UpdateWithSideEffects(Loading, requestRecipe(1))
     | CreateFavorite(recipeId) =>
       switch (state) {
       | Loaded(recipe) =>

@@ -15,6 +15,7 @@ test('it should render a single recipe', async () => {
       cook_time: '15 minutes',
       prep_time: '1 minute',
       total_time: '16 minutes',
+      image_url: '',
       ingredients: [
         { id: 101, name: '1 box kraft mac n cheese' },
         { id: 102, name: '1 tbsp sriracha' }
@@ -30,7 +31,7 @@ test('it should render a single recipe', async () => {
     route: '/recipes/1'
   });
 
-  expect(getByText('Loading')).toBeTruthy();
+  expect(getByText('Loading...')).toBeTruthy();
   await waitForElement(() => getByText('Mac and Cheese'));
   expect(getByText('Mac and Cheese')).toBeTruthy();
   expect(getRequest.isDone()).toBe(true);
