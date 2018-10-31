@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM, { render } from 'react-dom';
 import { MemoryRouter } from 'react-router';
-import App from './App';
+import AppBs from './App.bs';
+
+const App = AppBs.jsComponent;
 
 it('renders without crashing', () => {
   const div = document.createElement('div');

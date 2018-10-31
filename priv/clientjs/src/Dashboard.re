@@ -16,14 +16,10 @@ let component = ReasonReact.reducerComponent("Dashboard");
 let requestRecipes = self =>
   Js.Promise.(
     Api.getRecipes()
-    |> then_(recipes => {
-         Js.log("Hi");
-         Js.Promise.resolve(self.ReasonReact.send(LoadRecipes(recipes)));
-       })
-    |> catch(_err => {
-         Js.log(_err);
-         Js.Promise.resolve(self.ReasonReact.send(FetchFailure));
-       })
+    |> then_(recipes =>
+         Js.Promise.resolve(self.ReasonReact.send(LoadRecipes(recipes)))
+       )
+    |> catch(_err => Js.Promise.resolve(self.ReasonReact.send(FetchFailure)))
   )
   |> ignore;
 
@@ -37,10 +33,7 @@ let createFavorite = (recipeId, recipe, self) =>
            ),
          )
        )
-    |> catch(_err => {
-         Js.log(_err);
-         resolve(self.ReasonReact.send(FetchFailure));
-       })
+    |> catch(_err => resolve(self.ReasonReact.send(FetchFailure)))
   )
   |> ignore;
 
@@ -54,17 +47,19 @@ let deleteFavorite = (recipeId, recipe, self) =>
            ),
          )
        )
-    |> catch(_err => {
-         Js.log(_err);
-         resolve(self.ReasonReact.send(FetchFailure));
-       })
+    |> catch(_err => resolve(self.ReasonReact.send(FetchFailure)))
   )
   |> ignore;
 
 let make = _children => {
   ...component,
   initialState: () => Loading,
-  didMount: self => self.send(FetchRecipes),
+  didMount: self => {
+    if (!Api.isAuthenticated()) {
+      ReasonReact.Router.push("/sign_in");
+    };
+    self.send(FetchRecipes);
+  },
   reducer: (action, state) =>
     switch (action) {
     | FetchFailure => ReasonReact.Update(Error("poop"))
@@ -100,20 +95,17 @@ let make = _children => {
       }
     | LoadRecipes(recipes) => ReasonReact.Update(Loaded(recipes))
     | UpdateRecipe(recipeId, recipe) =>
-      Js.log("here 0");
       switch (state) {
       | Loaded(recipes) =>
-        Js.log("here 1");
         let newRecipes =
           recipes
           |> Array.to_list
           |> List.filter(Recipe.(r => r.id != recipeId))
           |> Array.of_list
           |> Array.append([|recipe|]);
-        Js.log(newRecipes);
         ReasonReact.Update(Loaded(newRecipes));
       | _ => ReasonReact.NoUpdate
-      };
+      }
     },
   render: self =>
     switch (self.state) {
@@ -130,7 +122,7 @@ let make = _children => {
                     selected ?
                       self.send(CreateFavorite(recipe.id)) :
                       self.send(DeleteFavorite(recipe.id))
-              );
+                );
 
               <RecipeCard
                 key={string_of_int(recipe.id)}

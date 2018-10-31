@@ -1,10 +1,11 @@
-/*
-  get a cookie's contents as a string
- */
-[@bs.module "js-cookie"] [@bs.return nullable]
-external getAsString: string => option(string) = "get";
+type result('a, 'b) =
+  | Ok('a)
+  | Error('b);
 
 module Decode = {
+  let loginSuccess = Json.Decode.(json => json |> field("token", string));
+  let loginFailure = Json.Decode.(json => json |> field("message", string));
+
   let ingredient =
     Ingredient.(
       json =>
@@ -39,17 +40,22 @@ module Decode = {
         }
     );
 
-  let recipesShow = json =>
-    Json.Decode.(json |> field("recipe", recipe));
+  let recipesShow = json => Json.Decode.(json |> field("recipe", recipe));
 
   let recipesIndex = json =>
     Json.Decode.(json |> field("recipes", array(recipe)));
 };
 
+let isAuthenticated = () =>
+  switch (Cookie.getAsString("token")) {
+  | Some(token) => true
+  | None => false
+  };
+
 let authToken = () =>
   "Bearer: "
   ++ (
-    switch (getAsString("token")) {
+    switch (Cookie.getAsString("token")) {
     | Some(token) => token
     | None => ""
     }
@@ -87,9 +93,12 @@ let getRecipes = () =>
     |> then_(json => json |> Decode.recipesIndex |> resolve)
   );
 
-let getRecipe = (recipeId) =>
+let getRecipe = recipeId =>
   Js.Promise.(
-    Fetch.fetchWithInit("/api/recipes/" ++ string_of_int(recipeId), getRequestConfig())
+    Fetch.fetchWithInit(
+      "/api/recipes/" ++ string_of_int(recipeId),
+      getRequestConfig(),
+    )
     |> then_(Fetch.Response.json)
     |> then_(json => json |> Decode.recipesShow |> resolve)
   );
@@ -97,7 +106,7 @@ let getRecipe = (recipeId) =>
 let createFavorite = recipeId => {
   let payload = Js.Dict.empty();
   Js.Dict.set(payload, "recipe_id", Js.Json.number(float_of_int(recipeId)));
-  Fetch.fetchWithInit("/api/favorites", postRequestConfig(payload))
+  Fetch.fetchWithInit("/api/favorites", postRequestConfig(payload));
 };
 
 let deleteFavorite = recipeId =>
@@ -110,3 +119,29 @@ let deleteFavorite = recipeId =>
 
 let setFavoriteStatus = (recipeId, favoriteStatus) =>
   favoriteStatus ? createFavorite(recipeId) : deleteFavorite(recipeId);
+
+let login = (email, password) => {
+  let body = Js.Dict.empty();
+  let payload = Js.Dict.empty();
+  Js.Dict.set(payload, "email", Js.Json.string(email));
+  Js.Dict.set(payload, "password", Js.Json.string(password));
+  Js.Dict.set(body, "session", Js.Json.object_(payload));
+
+  Js.Promise.(
+    Fetch.fetchWithInit("/api/sessions", postRequestConfig(body))
+    |> then_(response =>
+         switch (response |> Fetch.Response.status) {
+         | 200 =>
+           response
+           |> Fetch.Response.json
+           |> then_(json => json |> Decode.loginSuccess |> resolve)
+           |> then_(successRecord => resolve(Ok(successRecord)))
+         | _ =>
+           response
+           |> Fetch.Response.json
+           |> then_(json => json |> Decode.loginFailure |> resolve)
+           |> then_(failureRecord => resolve(Error(failureRecord)))
+         }
+       )
+  );
+};

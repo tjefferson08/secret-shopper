@@ -19,10 +19,7 @@ let requestRecipe = (recipeId, self) =>
     |> then_(recipe =>
          Js.Promise.resolve(self.ReasonReact.send(LoadRecipe(recipe)))
        )
-    |> catch(_err => {
-         Js.log(_err);
-         Js.Promise.resolve(self.ReasonReact.send(FetchFailure));
-       })
+    |> catch(_err => Js.Promise.resolve(self.ReasonReact.send(FetchFailure)))
   )
   |> ignore;
 
@@ -36,10 +33,7 @@ let createFavorite = (recipeId, recipe, self) =>
            ),
          )
        )
-    |> catch(_err => {
-         Js.log(_err);
-         resolve(self.ReasonReact.send(FetchFailure));
-       })
+    |> catch(_err => resolve(self.ReasonReact.send(FetchFailure)))
   )
   |> ignore;
 
@@ -53,10 +47,7 @@ let deleteFavorite = (recipeId, recipe, self) =>
            ),
          )
        )
-    |> catch(_err => {
-         Js.log(_err);
-         resolve(self.ReasonReact.send(FetchFailure));
-       })
+    |> catch(_err => resolve(self.ReasonReact.send(FetchFailure)))
   )
   |> ignore;
 
@@ -67,7 +58,8 @@ let make = _children => {
   reducer: (action, state) =>
     switch (action) {
     | FetchFailure => ReasonReact.Update(Error("poop"))
-    | FetchRecipe => ReasonReact.UpdateWithSideEffects(Loading, requestRecipe(1))
+    | FetchRecipe =>
+      ReasonReact.UpdateWithSideEffects(Loading, requestRecipe(1))
     | CreateFavorite(recipeId) =>
       switch (state) {
       | Loaded(recipe) =>
@@ -88,14 +80,10 @@ let make = _children => {
       }
     | LoadRecipe(recipe) => ReasonReact.Update(Loaded(recipe))
     | UpdateRecipe(recipeId, newRecipe) =>
-      Js.log("here 0");
       switch (state) {
-      | Loaded(recipe) =>
-        Js.log("here 1");
-        Js.log(newRecipe);
-        ReasonReact.Update(Loaded(newRecipe));
+      | Loaded(recipe) => ReasonReact.Update(Loaded(newRecipe))
       | _ => ReasonReact.NoUpdate
-      };
+      }
     },
   render: self =>
     switch (self.state) {

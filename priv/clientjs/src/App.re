@@ -23,13 +23,17 @@
 
 type route =
   | Dashboard
-  | RecipeShow(int);
+  | NotFound
+  | RecipeShow(int)
+  | SignIn;
 
 let mapUrlToRoute = (url: ReasonReact.Router.url) =>
   switch (url.path) {
   | [] => Dashboard
+  | ["dashboard"] => Dashboard
   | ["recipes", recipeId] => RecipeShow(int_of_string(recipeId))
-  | _ => Dashboard
+  | ["sign_in"] => SignIn
+  | _ => NotFound
   };
 
 type state = {route};
@@ -45,8 +49,13 @@ let make = _children => {
     switch (action) {
     | ChangeRoute(route) => ReasonReact.Update({route: route})
     },
-  initialState: () => {route: ReasonReact.Router.dangerouslyGetInitialUrl() |> mapUrlToRoute},
+  initialState: () => {route: Dashboard},
   didMount: self => {
+    self.send(
+      ChangeRoute(
+        ReasonReact.Router.dangerouslyGetInitialUrl() |> mapUrlToRoute,
+      ),
+    );
     let watcherId =
       ReasonReact.Router.watchUrl(url =>
         switch (mapUrlToRoute(url)) {
@@ -57,9 +66,11 @@ let make = _children => {
   },
   render: self =>
     switch (self.state.route) {
-    | Dashboard => <div> {ReasonReact.string("Hello world")} </div>
+    | Dashboard => <Dashboard />
     | RecipeShow(id) =>
       <div> {ReasonReact.string("Recipe Show " ++ string_of_int(id))} </div>
+    | NotFound => <div> {ReasonReact.string("404")} </div>
+    | SignIn => <SignIn />
     },
 };
 
