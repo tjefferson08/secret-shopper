@@ -33,7 +33,7 @@ module Make = (Config: {type data;}) => {
       },
     render: ({state}) =>
       switch (state) {
-      | Loading => <div> {ReasonReact.string("loading...")} </div>
+      | Loading => <div> {ReasonReact.string("Loading...")} </div>
       | Failed(error) => <div> {ReasonReact.string(failedMessage)} </div>
       | Loaded(data) => render(data)
       },

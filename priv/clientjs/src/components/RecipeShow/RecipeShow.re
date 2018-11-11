@@ -131,3 +131,11 @@ let component = ReasonReact.statelessComponent("RecipeShow");
 /*       ); */
 /*     }, */
 /* }; */
+
+[@bs.deriving abstract]
+type jsProps = {recipeId: int};
+
+let jsComponent =
+  ReasonReact.wrapReasonForJs(~component, jsProps =>
+    make(~recipeId=jsProps->recipeIdGet, [||])
+  );

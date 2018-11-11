@@ -3,6 +3,9 @@ import { cleanup, waitForElement } from 'react-testing-library';
 import { renderWithRedux } from '../../../test/dom_testing';
 import nock, { isDone } from '../../../test/nock';
 import Router from '../../Router';
+import RecipeShowBs from '../../components/RecipeShow/RecipeShow.bs';
+
+const RecipeShow = RecipeShowBs.jsComponent;
 
 afterEach(cleanup);
 
@@ -26,10 +29,7 @@ test('it should render a single recipe', async () => {
       ]
     }
   });
-  const { getByText } = renderWithRedux(<Router />, {
-    initialState: { authentication: { isAuthenticated: true } },
-    route: '/recipes/1'
-  });
+  const { getByText } = renderWithRedux(<RecipeShow recipeId={1} />);
 
   expect(getByText('Loading...')).toBeTruthy();
   await waitForElement(() => getByText('Mac and Cheese'));
