@@ -67,8 +67,7 @@ let make = _children => {
   render: self =>
     switch (self.state.route) {
     | Dashboard => <Dashboard />
-    | RecipeShow(id) =>
-      <div> {ReasonReact.string("Recipe Show " ++ string_of_int(id))} </div>
+    | RecipeShow(id) => <div> <RecipeShow recipeId=id /> </div>
     | NotFound => <div> {ReasonReact.string("404")} </div>
     | SignIn => <SignIn />
     },
