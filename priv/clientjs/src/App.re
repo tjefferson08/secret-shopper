@@ -1,25 +1,5 @@
-/* import { ConnectedRouter } from 'connected-react-router';
- * import React from 'react';
- * import { Provider } from 'react-redux';
- * import NavBar from './NavBar/NavBar';
- * import Router from './Router';
- * import { createStore } from './store';
- * import './App.css';
- *
- * const { store, history } = createStore();
- *
- * const App = () =>
- *   <Provider store={store}>
- *     <ConnectedRouter history={history}>
- *       <div>
- *         <NavBar />
- *         <hr />
- *         <Router />
- *       </div>
- *     </ConnectedRouter>
- *   </Provider>;
- *
- * export default App; */
+/* TODO: load CSS */
+/* import './App.css'; */
 
 type route =
   | Dashboard
@@ -65,11 +45,12 @@ let make = _children => {
     self.onUnmount(() => ReasonReact.Router.unwatchUrl(watcherId));
   },
   render: self =>
-    switch (self.state.route) {
-    | Dashboard => <Dashboard />
-    | RecipeShow(id) => <div> <RecipeShow recipeId=id /> </div>
-    | NotFound => <div> {ReasonReact.string("404")} </div>
-    | SignIn => <SignIn />
+    switch (Api.isAuthenticated(), self.state.route) {
+    | (true, Dashboard) => <Dashboard />
+    | (false, Dashboard) => <SignIn />
+    | (_, RecipeShow(id)) => <div> <RecipeShow recipeId=id /> </div>
+    | (_, NotFound) => <div> {ReasonReact.string("404")} </div>
+    | (_, SignIn) => <SignIn />
     },
 };
 

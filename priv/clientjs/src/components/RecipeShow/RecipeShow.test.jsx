@@ -1,8 +1,6 @@
 import React from 'react';
-import { cleanup, waitForElement } from 'react-testing-library';
-import { renderWithRedux } from '../../../test/dom_testing';
+import { cleanup, render, waitForElement } from 'react-testing-library';
 import nock, { isDone } from '../../../test/nock';
-import Router from '../../Router';
 import RecipeShowBs from '../../components/RecipeShow/RecipeShow.bs';
 
 const RecipeShow = RecipeShowBs.jsComponent;
@@ -29,7 +27,7 @@ test('it should render a single recipe', async () => {
       ]
     }
   });
-  const { getByText } = renderWithRedux(<RecipeShow recipeId={1} />);
+  const { getByText } = render(<RecipeShow recipeId={1} />);
 
   expect(getByText('Loading...')).toBeTruthy();
   await waitForElement(() => getByText('Mac and Cheese'));

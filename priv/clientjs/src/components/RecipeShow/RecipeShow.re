@@ -7,116 +7,11 @@ let make = (~recipeId, _children) =>
   RecipeFetcher.make(
     ~fetch=() => Api.getRecipe(recipeId),
     ~failedMessage="Unable to load recipe",
-    ~render=
-      recipe =>
-        Recipe.(
-          <RecipeCard
-            key={string_of_int(recipe.id)}
-            recipe
-            showDetails=true
-            setFavorite={_ => {}}
-          />
-        ),
+    ~render=recipe => <RecipeCard recipe showDetails=true />,
     [||],
   );
 
-type action =
-  | CreateFavorite(int)
-  | DeleteFavorite(int)
-  | UpdateRecipe(int, Recipe.t);
-
-type state =
-  | Error(string)
-  | Loaded(Recipe.t);
-
-let component = ReasonReact.reducer("RecipeShow");
-
-/* let createFavorite = (recipeId, recipe, self) => */
-/*   Js.Promise.( */
-/*     Api.createFavorite(recipeId) */
-/*     |> then_(_resp => */
-/*          resolve( */
-/*            self.ReasonReact.send( */
-/*              UpdateRecipe(recipeId, {...recipe, favorited: true}), */
-/*            ), */
-/*          ) */
-/*        ) */
-/*     |> catch(_err => resolve(self.ReasonReact.send(FetchFailure))) */
-/*   ) */
-/*   |> ignore; */
-
-/* let deleteFavorite = (recipeId, recipe, self) => */
-/*   Js.Promise.( */
-/*     Api.deleteFavorite(recipeId) */
-/*     |> then_(_resp => */
-/*          resolve( */
-/*            self.ReasonReact.send( */
-/*              UpdateRecipe(recipeId, {...recipe, favorited: false}), */
-/*            ), */
-/*          ) */
-/*        ) */
-/*     |> catch(_err => resolve(self.ReasonReact.send(FetchFailure))) */
-/*   ) */
-/*   |> ignore; */
-
-/* let make = _children => { */
-/*   ...component, */
-/*   initialState: () => Loading, */
-/*   didMount: self => self.send(FetchRecipe), */
-/*   reducer: (action, state) => */
-/*     switch (action) { */
-/*     | FetchFailure => ReasonReact.Update(Error("poop")) */
-/*     | FetchRecipe => */
-/*       ReasonReact.UpdateWithSideEffects(Loading, requestRecipe(1)) */
-/*     | CreateFavorite(recipeId) => */
-/*       switch (state) { */
-/*       | Loaded(recipe) => */
-/*         ReasonReact.UpdateWithSideEffects( */
-/*           state, */
-/*           createFavorite(recipeId, recipe), */
-/*         ) */
-/*       | _ => ReasonReact.NoUpdate */
-/*       } */
-/*     | DeleteFavorite(recipeId) => */
-/*       switch (state) { */
-/*       | Loaded(recipe) => */
-/*         ReasonReact.UpdateWithSideEffects( */
-/*           state, */
-/*           deleteFavorite(recipeId, recipe), */
-/*         ) */
-/*       | _ => ReasonReact.NoUpdate */
-/*       } */
-/*     | LoadRecipe(recipe) => ReasonReact.Update(Loaded(recipe)) */
-/*     | UpdateRecipe(recipeId, newRecipe) => */
-/*       switch (state) { */
-/*       | Loaded(recipe) => ReasonReact.Update(Loaded(newRecipe)) */
-/*       | _ => ReasonReact.NoUpdate */
-/*       } */
-/*     }, */
-/*   render: self => */
-/*     switch (self.state) { */
-/*     | Error(msg) => <div> {ReasonReact.string("Error: " ++ msg)} </div> */
-/*     | Loading => <div> {ReasonReact.string("Loading...")} </div> */
-/*     | Loaded(recipe) => */
-/*       let setFavorite = */
-/*         Recipe.( */
-/*           ( */
-/*             selected => */
-/*               selected ? */
-/*                 self.send(CreateFavorite(recipe.id)) : */
-/*                 self.send(DeleteFavorite(recipe.id)) */
-/*           ) */
-/*         ); */
-/*       Recipe.( */
-/*         <RecipeCard */
-/*           key={string_of_int(recipe.id)} */
-/*           recipe */
-/*           showDetails=false */
-/*           setFavorite */
-/*         /> */
-/*       ); */
-/*     }, */
-/* }; */
+let component = ReasonReact.statelessComponent("RecipeShow");
 
 [@bs.deriving abstract]
 type jsProps = {recipeId: int};
