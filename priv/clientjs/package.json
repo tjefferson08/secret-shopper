@@ -5,6 +5,7 @@
   "dependencies": {
     "@glennsl/bs-json": "^3.0.0",
     "axios": "^0.18.0",
+    "bs-css": "^7.4.0",
     "bs-fetch": "^0.3.0",
     "bs-json": "^1.0.1",
     "connected-react-router": "^4.3.0",

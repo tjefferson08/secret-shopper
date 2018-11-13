@@ -1,5 +1,22 @@
 open Recipe;
 
+module Styles = {
+  open Css;
+
+  let headerName =
+    style([display(inlineBlock), verticalAlign(middle), userSelect(none)]);
+
+  let recipeCard =
+    style([
+      textAlign(center),
+      backgroundColor(white),
+      borderRadius(px(5)),
+      padding(px(20)),
+    ]);
+
+  let recipeThumbnail = style([width(pct(100.0)), maxWidth(px(500))]);
+};
+
 module Card = {
   let component = ReasonReact.statelessComponent("RecipeCard");
 
@@ -20,12 +37,18 @@ module Card = {
       ...component,
       render: _self =>
         <div key={string_of_int(id)} className="pure-u-1 pure-u-md-1-3">
-          <div className="recipe-card">
+          <div className={"recipe-card " ++ Styles.recipeCard}>
             <div className="header">
               <FavoriteBadge selected=favorited onClick=setFavorite />
-              <h3 className="name"> {ReasonReact.string(name)} </h3>
+              <h3 className={"name " ++ Styles.headerName}>
+                {ReasonReact.string(name)}
+              </h3>
             </div>
-            <img className="thumbnail" alt=name src=image_url />
+            <img
+              className={"thumbnail " ++ Styles.recipeThumbnail}
+              alt=name
+              src=image_url
+            />
             <Time label="Cook time" value=cook_time />
             <Time label="Prep time" value=prep_time />
             <Time label="Total time" value=total_time />
