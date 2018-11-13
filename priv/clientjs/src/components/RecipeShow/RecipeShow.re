@@ -20,30 +20,16 @@ let make = (~recipeId, _children) =>
     [||],
   );
 
-/* type action = */
-/*   | FetchRecipe */
-/*   | FetchFailure */
-/*   | CreateFavorite(int) */
-/*   | DeleteFavorite(int) */
-/*   | UpdateRecipe(int, Recipe.t) */
-/*   | LoadRecipe(Recipe.t); */
+type action =
+  | CreateFavorite(int)
+  | DeleteFavorite(int)
+  | UpdateRecipe(int, Recipe.t);
 
-/* type state = */
-/*   | Error(string) */
-/*   | Loading */
-/*   | Loaded(Recipe.t); */
+type state =
+  | Error(string)
+  | Loaded(Recipe.t);
 
-let component = ReasonReact.statelessComponent("RecipeShow");
-
-/* let requestRecipe = (recipeId, self) => */
-/*   Js.Promise.( */
-/*     Api.getRecipe(recipeId) */
-/*     |> then_(recipe => */
-/*          Js.Promise.resolve(self.ReasonReact.send(LoadRecipe(recipe))) */
-/*        ) */
-/*     |> catch(_err => Js.Promise.resolve(self.ReasonReact.send(FetchFailure))) */
-/*   ) */
-/*   |> ignore; */
+let component = ReasonReact.reducer("RecipeShow");
 
 /* let createFavorite = (recipeId, recipe, self) => */
 /*   Js.Promise.( */
